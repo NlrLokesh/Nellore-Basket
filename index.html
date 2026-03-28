@@ -4,211 +4,900 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nellore Basket – Premium Grocery</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-/* KEEPING YOUR DESIGN SAME */
-body {
-  font-family: 'Montserrat', sans-serif;
-  background: #050505;
-  color: white;
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.container {
-  max-width: 500px;
-  margin: auto;
-  padding: 20px;
-}
+  :root {
+    --gold: #d4af37;
+    --gold-light: #f7d774;
+    --gold-dark: #a67c00;
+    --gold-shine: #fff2b3;
+    --black: #050505;
+    --black-mid: #0f0f0f;
+    --black-card: #161616;
+    --black-border: #2f2f2f;
+    --white: #ffffff;
+    --white-dim: #d6d6d6;
+    --red-warn: #ff4d4d;
+  }
 
-.section-title {
-  margin-top: 20px;
-  color: gold;
-}
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-.customer-card input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 8px;
-  border-radius: 6px;
-  border: 1px solid #333;
-  background: #111;
-  color: white;
-}
+  /* ─── HEADER ─── */
+  header {
+    background: var(--black-mid);
+    border-bottom: 1px solid var(--gold-dark);
+    padding: 22px 20px 18px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
+  }
+  .header-tag {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold-light) 40%, var(--gold) 60%, var(--gold-shine) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+  }
+  .header-sub {
+    font-size: 10px;
+    color: var(--white-dim);
+    letter-spacing: 3px;
+    margin-top: 5px;
+    font-weight: 300;
+    text-transform: uppercase;
+  }
 
-/* Progress bar */
-.progress-box {
-  margin: 15px 0;
-}
-.progress-top {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: #aaa;
-}
-.progress-bar-bg {
-  height: 6px;
-  background: #111;
-  border-radius: 10px;
-  overflow: hidden;
-}
-.progress-bar-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, gold, #f7d774);
-  transition: 0.3s;
-}
+  /* ─── CONTAINER ─── */
+  .container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px 15px 30px;
+  }
 
-/* Items */
-.item {
-  display: flex;
-  justify-content: space-between;
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #333;
-  border-radius: 10px;
-}
+  /* ─── SECTION TITLE ─── */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 24px 0 12px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold-dark), transparent);
+  }
 
-select {
-  background: #111;
-  color: white;
-  border-radius: 6px;
-}
+  /* ─── CUSTOMER CARD ─── */
+  .customer-card {
+    background: var(--black-card);
+    border: 1px solid var(--black-border);
+    border-radius: 14px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .customer-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
+  }
+  .input-group { position: relative; }
+  .input-group input {
+    width: 100%;
+    padding: 12px 14px 12px 42px;
+    background: var(--black-mid);
+    border: 1px solid var(--black-border);
+    border-radius: 8px;
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    outline: none;
+    transition: border 0.25s, box-shadow 0.25s;
+  }
+  .input-group input::placeholder { color: #444; }
+  .input-group input:focus {
+    border-color: var(--gold-dark);
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
+  }
+  .input-icon {
+    position: absolute;
+    left: 14px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    pointer-events: none;
+  }
 
-/* Summary */
-.summary-card {
-  border: 1px solid #333;
-  padding: 10px;
-  border-radius: 10px;
-}
+  /* ─── ITEM CARD ─── */
+  .item {
+    display: flex;
+    align-items: center;
+    background: var(--black-card);
+    border: 1px solid var(--black-border);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+  }
+  .item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(212,175,55,0.05), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .item.selected {
+    border-color: var(--gold-dark);
+    box-shadow: 0 0 0 1px rgba(166,124,0,0.5), 0 4px 18px rgba(212,175,55,0.08);
+  }
+  .item.selected::before { opacity: 0.5; }
+  .item.active {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px var(--gold-dark), 0 8px 30px rgba(212,175,55,0.18);
+    background: #1c1800;
+  }
+  .item.active::before { opacity: 1; }
+  .item.error {
+    border-color: var(--red-warn) !important;
+    box-shadow: 0 0 0 1px rgba(255,77,77,0.4), 0 4px 20px rgba(255,77,77,0.12) !important;
+    animation: shake 0.35s ease;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%      { transform: translateX(-6px); }
+    40%      { transform: translateX(6px); }
+    60%      { transform: translateX(-4px); }
+    80%      { transform: translateX(4px); }
+  }
 
-.btn {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  background: green;
-  color: white;
-  border: none;
-  border-radius: 8px;
-}
+  .check-badge {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 22px; height: 22px;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-light));
+    border-radius: 50%;
+    font-size: 11px;
+    color: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    pointer-events: none;
+  }
+  .item.active .check-badge { opacity: 1; transform: scale(1); }
+
+  .item img {
+    width: 74px; height: 74px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex-shrink: 0;
+    border: 1px solid #222;
+    transition: border 0.3s, box-shadow 0.3s;
+    pointer-events: none;
+  }
+  .item.active img {
+    border-color: var(--gold-dark);
+    box-shadow: 0 0 12px rgba(212,175,55,0.2);
+  }
+
+  .details { flex: 1; margin-left: 13px; }
+
+  .item-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    transition: color 0.3s;
+  }
+  .item.selected .item-name,
+  .item.active .item-name { color: var(--gold-light); }
+
+  .item-sub {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #b0b0b0;
+    text-transform: uppercase;
+    margin-top: 3px;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+  .item.active .item-sub { color: var(--gold-dark); }
+
+  .item-price {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gold);
+    margin-top: 7px;
+    letter-spacing: 0.3px;
+  }
+  .item-price .rupee  { font-size: 13px; font-weight: 700; }
+  .item-price .amount { font-size: 15px; font-weight: 700; }
+  .item-price .per-kg {
+    font-size: 11px;
+    color: #666;
+    font-weight: 400;
+    margin-left: 2px;
+    letter-spacing: 0;
+  }
+
+  .badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color: var(--black);
+    font-size: 7px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 20px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-left: 6px;
+    vertical-align: middle;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  /* ─── QUANTITY ─── */
+  .qty-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-right: 30px;
+  }
+  .qty-label {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    color: #3a3a3a;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+  .item.selected .qty-label,
+  .item.active   .qty-label { color: var(--gold-dark); }
+
+  select.qty-select {
+    padding: 9px 28px 9px 12px;
+    border-radius: 8px;
+    border: 1px solid #252525;
+    background: var(--black-mid);
+    color: #444;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s;
+    min-width: 80px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23444' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    pointer-events: none;
+  }
+  .item.selected select.qty-select,
+  .item.active   select.qty-select {
+    pointer-events: auto;
+    border-color: var(--gold-dark);
+    color: #888;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23a67c00' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
+  .item.active select.qty-select {
+    border-color: var(--gold);
+    color: var(--gold-light);
+    background-color: #1a1500;
+    box-shadow: 0 0 0 1px var(--gold-dark), 0 3px 12px rgba(212,175,55,0.18);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23d4af37' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
+  .item.error select.qty-select {
+    border-color: var(--red-warn) !important;
+    box-shadow: 0 0 0 1px rgba(255,77,77,0.5) !important;
+  }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed;
+    top: 20px; left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: #1e0000;
+    border: 1px solid var(--red-warn);
+    color: var(--red-warn);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 12px 22px;
+    border-radius: 10px;
+    box-shadow: 0 6px 24px rgba(255,77,77,0.25);
+    z-index: 9999;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* ─── SUMMARY ─── */
+  .summary-card {
+    background: var(--black-card);
+    border: 1px solid var(--black-border);
+    border-radius: 14px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
+  }
+  .summary-customer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #222;
+  }
+  .cust-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .cust-info { display: flex; flex-direction: column; }
+  .cust-label {
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .cust-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold-light);
+    margin-top: 1px;
+    line-height: 1.2;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #1e1e1e;
+    font-size: 13px;
+  }
+  .summary-row:last-of-type { border-bottom: none; }
+  .s-name  { color: var(--white); font-weight: 500; }
+  .s-qty   { color: #bbbbbb; font-size: 11px; font-weight: 600; }
+  .s-price { color: var(--gold); font-weight: 700; font-size: 13px; }
+
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 14px;
+    margin-top: 10px;
+    border-top: 1px solid var(--gold-dark);
+  }
+  .t-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--white-dim);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .t-amount {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold-light), var(--gold-shine));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .summary-empty {
+    text-align: center;
+    padding: 8px 0;
+    color: #999;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-style: italic;
+  }
+
+  /* ─── WHATSAPP BUTTON ─── */
+  .btn-whatsapp {
+    width: 100%;
+    padding: 16px;
+    margin-top: 16px;
+    background: linear-gradient(135deg, #0d6e2f, #25D366);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-whatsapp::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+    transition: left 0.6s ease;
+  }
+  .btn-whatsapp:hover::before { left: 150%; }
+  .btn-whatsapp:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(37,211,102,0.3);
+  }
+  .btn-whatsapp:active { transform: scale(0.98); }
+
+  .footer-note {
+    text-align: center;
+    font-size: 9px;
+    color: #2e2e2e;
+    letter-spacing: 2px;
+    margin-top: 14px;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+  }
 </style>
 </head>
-
 <body>
+
+<div class="toast" id="toast"></div>
+
+<header>
+  <div class="header-tag">✦ Available In Nellore City ✦</div>
+  <div class="header-title">Nellore Basket</div>
+  <div class="header-sub">Premium Grocery · Farm to Home</div>
+</header>
 
 <div class="container">
 
-<!-- DETAILS -->
-<div class="section-title">✦ Your Details</div>
-<div class="customer-card">
-  <input type="text" id="customerName" placeholder="Full Name" oninput="updateSummary()">
-  <input type="tel" id="customerPhone" placeholder="Phone Number" oninput="updateSummary()">
-</div>
-
-<!-- PROGRESS -->
-<div class="progress-box">
-  <div class="progress-top">
-    <span>Minimum Order</span>
-    <span id="kgText">0 / 8 kg</span>
+  <div class="section-title">✦ Your Details</div>
+  <div class="customer-card">
+    <div class="input-group">
+      <span class="input-icon">👤</span>
+      <input type="text" id="customerName" placeholder="Full Name" oninput="updateSummary()" />
+    </div>
   </div>
-  <div class="progress-bar-bg">
-    <div id="kgBar" class="progress-bar-fill"></div>
+
+  <div class="section-title">✦ Select Items</div>
+
+  <!-- ITEM 1: Minapappu -->
+  <div class="item" id="item-1" onclick="selectItem(event,'item-1')">
+    <div class="check-badge">✓</div>
+    <img src="mina.webp" loading="lazy" alt="Minapappu">
+    <div class="details">
+      <div class="item-name">Minapappu <span class="badge">Best</span></div>
+      <div class="item-sub">Urad Dal</div>
+      <div class="item-price">
+        <span class="rupee">₹</span><span class="amount">115</span><span class="per-kg"> / kg</span>
+      </div>
+    </div>
+    <div class="qty-wrapper">
+      <span class="qty-label">Quantity</span>
+      <select class="qty-select" onchange="onQtyChange(event,'item-1')">
+        <option value="0">— kg</option>
+        <option value="0.5">½ kg</option>
+        <option value="1">1 kg</option>
+        <option value="1.5">1.5 kg</option>
+        <option value="2">2 kg</option>
+        <option value="3">3 kg</option>
+      </select>
+    </div>
   </div>
-</div>
 
-<!-- ITEMS -->
-<div class="section-title">✦ Select Items</div>
+  <!-- ITEM 2: Kandipappu -->
+  <div class="item" id="item-2" onclick="selectItem(event,'item-2')">
+    <div class="check-badge">✓</div>
+    <img src="kandi.webp" loading="lazy" alt="Kandipappu">
+    <div class="details">
+      <div class="item-name">Kandipappu</div>
+      <div class="item-sub">Toor Dal</div>
+      <div class="item-price">
+        <span class="rupee">₹</span><span class="amount">135</span><span class="per-kg"> / kg</span>
+      </div>
+    </div>
+    <div class="qty-wrapper">
+      <span class="qty-label">Quantity</span>
+      <select class="qty-select" onchange="onQtyChange(event,'item-2')">
+        <option value="0">— kg</option>
+        <option value="0.5">½ kg</option>
+        <option value="1">1 kg</option>
+        <option value="1.5">1.5 kg</option>
+        <option value="2">2 kg</option>
+        <option value="3">3 kg</option>
+      </select>
+    </div>
+  </div>
 
-<div class="item">
-  <span>Kandipappu (₹135/kg)</span>
-  <select onchange="updateSummary()" id="q1">
-    <option value="0">0</option><option>1</option><option>2</option><option>3</option>
-  </select>
-</div>
+  <!-- ITEM 3: VeruSenagapappu -->
+  <div class="item" id="item-3" onclick="selectItem(event,'item-3')">
+    <div class="check-badge">✓</div>
+    <img src="veru.webp" loading="lazy" alt="VeruSenagapappu">
+    <div class="details">
+      <div class="item-name">Veru Senagapappu</div>
+      <div class="item-sub">Whole Chickpeas</div>
+      <div class="item-price">
+        <span class="rupee">₹</span><span class="amount">160</span><span class="per-kg"> / kg</span>
+      </div>
+    </div>
+    <div class="qty-wrapper">
+      <span class="qty-label">Quantity</span>
+      <select class="qty-select" onchange="onQtyChange(event,'item-3')">
+        <option value="0">— kg</option>
+        <option value="0.5">½ kg</option>
+        <option value="1">1 kg</option>
+        <option value="1.5">1.5 kg</option>
+        <option value="2">2 kg</option>
+        <option value="3">3 kg</option>
+      </select>
+    </div>
+  </div>
 
-<div class="item">
-  <span>Minapappu (₹115/kg)</span>
-  <select onchange="updateSummary()" id="q2">
-    <option value="0">0</option><option>1</option><option>2</option><option>3</option>
-  </select>
-</div>
+  <!-- ITEM 4: Pesalapappu -->
+  <div class="item" id="item-4" onclick="selectItem(event,'item-4')">
+    <div class="check-badge">✓</div>
+    <img src="pesa.webp" loading="lazy" alt="Pesalapappu">
+    <div class="details">
+      <div class="item-name">Pesalapappu</div>
+      <div class="item-sub">Moong Dal</div>
+      <div class="item-price">
+        <span class="rupee">₹</span><span class="amount">110</span><span class="per-kg"> / kg</span>
+      </div>
+    </div>
+    <div class="qty-wrapper">
+      <span class="qty-label">Quantity</span>
+      <select class="qty-select" onchange="onQtyChange(event,'item-4')">
+        <option value="0">— kg</option>
+        <option value="0.5">½ kg</option>
+        <option value="1">1 kg</option>
+        <option value="1.5">1.5 kg</option>
+        <option value="2">2 kg</option>
+        <option value="3">3 kg</option>
+      </select>
+    </div>
+  </div>
 
-<div class="item">
-  <span>Senagapappu (₹85/kg)</span>
-  <select onchange="updateSummary()" id="q3">
-    <option value="0">0</option><option>1</option><option>2</option><option>3</option>
-  </select>
-</div>
+  <!-- ITEM 5: Pachi Senagapappu -->
+  <div class="item" id="item-5" onclick="selectItem(event,'item-5')">
+    <div class="check-badge">✓</div>
+    <img src="pachi.webp" loading="lazy" alt="Pachi Senagapappu">
+    <div class="details">
+      <div class="item-name">Pachi Senagapappu</div>
+      <div class="item-sub">Raw Chickpeas</div>
+      <div class="item-price">
+        <span class="rupee">₹</span><span class="amount">85</span><span class="per-kg"> / kg</span>
+      </div>
+    </div>
+    <div class="qty-wrapper">
+      <span class="qty-label">Quantity</span>
+      <select class="qty-select" onchange="onQtyChange(event,'item-5')">
+        <option value="0">— kg</option>
+        <option value="0.5">½ kg</option>
+        <option value="1">1 kg</option>
+        <option value="1.5">1.5 kg</option>
+        <option value="2">2 kg</option>
+        <option value="3">3 kg</option>
+      </select>
+    </div>
+  </div>
 
-<!-- SUMMARY -->
-<div class="section-title">✦ Order Summary</div>
-<div class="summary-card" id="summary"></div>
+  <!-- ITEM 6: Saipappu -->
+  <div class="item" id="item-6" onclick="selectItem(event,'item-6')">
+    <div class="check-badge">✓</div>
+    <img src="sai.webp" loading="lazy" alt="Saipappu">
+    <div class="details">
+      <div class="item-name">Saipappu</div>
+      <div class="item-sub">Lentils</div>
+      <div class="item-price">
+        <span class="rupee">₹</span><span class="amount">90</span><span class="per-kg"> / kg</span>
+      </div>
+    </div>
+    <div class="qty-wrapper">
+      <span class="qty-label">Quantity</span>
+      <select class="qty-select" onchange="onQtyChange(event,'item-6')">
+        <option value="0">— kg</option>
+        <option value="0.5">½ kg</option>
+        <option value="1">1 kg</option>
+        <option value="1.5">1.5 kg</option>
+        <option value="2">2 kg</option>
+        <option value="3">3 kg</option>
+      </select>
+    </div>
+  </div>
 
-<button class="btn" onclick="orderNow()">Place Order on WhatsApp</button>
+  <!-- ITEM 7: Chintapandu -->
+  <div class="item" id="item-7" onclick="selectItem(event,'item-7')">
+    <div class="check-badge">✓</div>
+    <img src="chin.webp" loading="lazy" alt="Chintapandu">
+    <div class="details">
+      <div class="item-name">Chintapandu</div>
+      <div class="item-sub">Tamarind</div>
+      <div class="item-price">
+        <span class="rupee">₹</span><span class="amount">170</span><span class="per-kg"> / kg</span>
+      </div>
+    </div>
+    <div class="qty-wrapper">
+      <span class="qty-label">Quantity</span>
+      <select class="qty-select" onchange="onQtyChange(event,'item-7')">
+        <option value="0">— kg</option>
+        <option value="0.5">½ kg</option>
+        <option value="1">1 kg</option>
+        <option value="1.5">1.5 kg</option>
+        <option value="2">2 kg</option>
+        <option value="3">3 kg</option>
+      </select>
+    </div>
+  </div>
 
+  <!-- Summary -->
+  <div class="section-title">✦ Order Summary</div>
+  <div class="summary-card">
+    <div class="summary-empty" id="summaryEmpty">No items selected yet</div>
+    <div id="summaryCustomer"></div>
+    <div id="summaryRows"></div>
+  </div>
+
+  <button class="btn-whatsapp" onclick="sendToWhatsApp()">
+    <span style="font-size:18px">💬</span> Place Order on WhatsApp
+  </button>
+
+  <div class="footer-note">✦ Orders confirmed via WhatsApp only ✦</div>
 </div>
 
 <script>
-const prices = [135,115,85];
-const names = ["Kandipappu","Minapappu","Senagapappu"];
+  // ✅ Prices matched correctly to items 1–7
+  const PRICES = {
+    'item-1': 115,  // Minapappu
+    'item-2': 135,  // Kandipappu
+    'item-3': 160,  // Veru Senagapappu
+    'item-4': 110,  // Pesalapappu
+    'item-5': 85,   // Pachi Senagapappu
+    'item-6': 90,   // Saipappu
+    'item-7': 170   // Chintapandu
+  };
 
-function updateSummary(){
-  let total = 0;
-  let totalKg = 0;
-  let html = "";
+  const NAMES = {
+    'item-1': 'Minapappu',
+    'item-2': 'Kandipappu',
+    'item-3': 'Veru Senagapappu',
+    'item-4': 'Pesalapappu',
+    'item-5': 'Pachi Senagapappu',
+    'item-6': 'Saipappu',
+    'item-7': 'Chintapandu'
+  };
 
-  for(let i=1;i<=3;i++){
-    let qty = parseFloat(document.getElementById("q"+i).value);
-    if(qty>0){
-      let cost = qty * prices[i-1];
-      total += cost;
-      totalKg += qty;
-      html += `${names[i-1]} - ${qty}kg = ₹${cost}<br>`;
+  const ALL_IDS = ['item-1','item-2','item-3','item-4','item-5','item-6','item-7'];
+  let toastTimer = null;
+
+  function selectItem(e, id) {
+    if (e.target.closest('select')) return;
+
+    const item = document.getElementById(id);
+    const sel  = item.querySelector('select');
+
+    if (item.classList.contains('active')) {
+      item.classList.remove('active', 'selected', 'error');
+      sel.value = '0';
+      updateSummary();
+      return;
     }
-  }
-
-  document.getElementById("summary").innerHTML = html + "<br>Total: ₹"+total;
-
-  // progress bar
-  let percent = Math.min((totalKg/8)*100,100);
-  document.getElementById("kgBar").style.width = percent+"%";
-  document.getElementById("kgText").innerText = totalKg+" / 8 kg";
-}
-
-function orderNow(){
-  let name = document.getElementById("customerName").value;
-  let phone = document.getElementById("customerPhone").value;
-
-  if(!name){
-    alert("Enter name");
-    return;
-  }
-
-  if(!phone || phone.length<10){
-    alert("Enter valid phone");
-    return;
-  }
-
-  let msg = "🛒 Nellore Basket Order\n";
-  msg += "Name: "+name+"\nPhone: "+phone+"\n\n";
-
-  let totalKg = 0;
-
-  for(let i=1;i<=3;i++){
-    let qty = parseFloat(document.getElementById("q"+i).value);
-    if(qty>0){
-      msg += names[i-1]+" - "+qty+"kg\n";
-      totalKg += qty;
+    if (item.classList.contains('selected')) {
+      item.classList.remove('selected', 'error');
+      sel.value = '0';
+      return;
     }
+
+    item.classList.add('selected');
+    item.classList.remove('error');
   }
 
-  if(totalKg < 8){
-    alert("Minimum 8kg required");
-    return;
+  function onQtyChange(e, id) {
+    e.stopPropagation();
+    const item = document.getElementById(id);
+    const sel  = item.querySelector('select');
+
+    if (parseFloat(sel.value) > 0) {
+      item.classList.add('active');
+      item.classList.remove('selected', 'error');
+    } else {
+      item.classList.remove('active');
+      item.classList.add('selected');
+    }
+    updateSummary();
   }
 
-  window.open("https://wa.me/918008970033?text="+encodeURIComponent(msg));
-}
+  function updateSummary() {
+    const name = document.getElementById('customerName').value.trim();
+    let html = '';
+    let total = 0;
+    let hasItems = false;
+
+    ALL_IDS.forEach(id => {
+      const qty = parseFloat(document.getElementById(id).querySelector('select').value);
+      if (qty > 0) {
+        const it = PRICES[id] * qty;
+        total += it;
+        hasItems = true;
+        html += `<div class="summary-row">
+          <span class="s-name">${NAMES[id]}</span>
+          <span class="s-qty">${qty} kg</span>
+          <span class="s-price">&#8377; ${it.toFixed(0)}</span>
+        </div>`;
+      }
+    });
+
+    const emptyEl    = document.getElementById('summaryEmpty');
+    const customerEl = document.getElementById('summaryCustomer');
+    const rowsEl     = document.getElementById('summaryRows');
+
+    if (!hasItems) {
+      emptyEl.style.display = 'block';
+      customerEl.innerHTML  = '';
+      rowsEl.innerHTML      = '';
+      return;
+    }
+
+    emptyEl.style.display = 'none';
+
+    customerEl.innerHTML = name
+      ? `<div class="summary-customer">
+           <div class="cust-icon">👤</div>
+           <div class="cust-info">
+             <span class="cust-label">Order for</span>
+             <span class="cust-name">${name}</span>
+           </div>
+         </div>`
+      : '';
+
+    html += `<div class="summary-total">
+      <span class="t-label">Grand Total</span>
+      <span class="t-amount">&#8377; ${total.toFixed(0)}</span>
+    </div>`;
+
+    rowsEl.innerHTML = html;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function sendToWhatsApp() {
+    const name = document.getElementById('customerName').value.trim();
+
+    if (!name) {
+      showToast('⚠ Please enter your Full Name');
+      document.getElementById('customerName').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('customerName').focus();
+      return;
+    }
+
+    // Check any selected-but-no-qty item
+    let missingId = null;
+    ALL_IDS.forEach(id => {
+      if (!missingId) {
+        const item = document.getElementById(id);
+        const qty  = parseFloat(item.querySelector('select').value);
+        if (item.classList.contains('selected') && qty === 0) missingId = id;
+      }
+    });
+
+    if (missingId) {
+      const item = document.getElementById(missingId);
+      item.classList.add('error');
+      item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast('⚠ Please select a Quantity for ' + NAMES[missingId]);
+      setTimeout(() => item.classList.remove('error'), 2500);
+      return;
+    }
+
+    let lines = '';
+    let total = 0;
+    let count = 1;
+    let hasItems = false;
+
+    ALL_IDS.forEach(id => {
+      const qty = parseFloat(document.getElementById(id).querySelector('select').value);
+      if (qty > 0) {
+        const it = PRICES[id] * qty;
+        lines += `${count}. ${NAMES[id]} - ${qty}kg - Rs.${it.toFixed(0)}\n`;
+        total += it;
+        count++;
+        hasItems = true;
+      }
+    });
+
+    if (!hasItems) {
+      showToast('⚠ Please select at least one item');
+      return;
+    }
+
+    const msg = `🛒 *Nellore Basket Order*\n👤 Name: ${name}\n\n${lines}\n💰 *Total: Rs.${total.toFixed(0)}*`;
+
+    // ✅ Your number
+    const phone = '918008970033';
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+  }
 </script>
 
 </body>
