@@ -831,7 +831,9 @@ function sendToWhatsApp() {
     if (qty > 0) {
       const it = PRICES[id] * qty;
 
-      lines += `${count}. ${NAMES[id]} ${qty}kg - ₹${it.toFixed(0)}%0A`;
+      // ❌ REMOVE %0A from here
+      lines += `${count}. ${NAMES[id]} ${qty}kg - ₹${it.toFixed(0)}\n`;
+
       total += it;
       count++;
       hasItems = true;
@@ -843,15 +845,18 @@ function sendToWhatsApp() {
     return;
   }
 
-  let msg = `🛒 *Nellore Basket Order*%0A`;
-  msg += `👤 *Name:* ${name}%0A%0A`;
+  // ✅ Clean message (no manual encoding)
+  let msg = `🛒 Nellore Basket Order\n`;
+  msg += `👤 Name: ${name}\n\n`;
   msg += lines;
-  msg += `%0ATotal: ₹${total}`;
+  msg += `\nTotal: ₹${total}`;
 
-  /* 🔴 CHANGE HERE */
   const shopPhone = '918008970033';
 
-  window.location.href = `https://wa.me/${shopPhone}?text=${encodeURIComponent(msg)}`;
+  // ✅ BEST universal WhatsApp link
+  const url = `https://api.whatsapp.com/send?phone=${shopPhone}&text=${encodeURIComponent(msg)}`;
+
+  window.location.href = url;
 }
 </script>
 
