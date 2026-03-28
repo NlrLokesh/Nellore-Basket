@@ -851,7 +851,7 @@ function sendToWhatsApp() {
   /* 🔴 CHANGE HERE */
   const shopPhone = '918008970033';
 
-  window.open(`https://wa.me/${shopPhone}?text=${msg}`, '_blank');
+  window.location.href = `https://wa.me/${shopPhone}?text=${encodeURIComponent(msg)}`;
 }
 </script>
 
