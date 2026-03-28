@@ -831,9 +831,7 @@ function sendToWhatsApp() {
     if (qty > 0) {
       const it = PRICES[id] * qty;
 
-      // ❌ REMOVE %0A from here
       lines += `${count}. ${NAMES[id]} ${qty}kg - ₹${it.toFixed(0)}\n`;
-
       total += it;
       count++;
       hasItems = true;
@@ -845,18 +843,23 @@ function sendToWhatsApp() {
     return;
   }
 
-  // ✅ Clean message (no manual encoding)
   let msg = `🛒 Nellore Basket Order\n`;
   msg += `👤 Name: ${name}\n\n`;
   msg += lines;
   msg += `\nTotal: ₹${total}`;
 
-  const shopPhone = '918008970033';
+  const phone = '918008970033';
 
-  // ✅ BEST universal WhatsApp link
-  const url = `https://api.whatsapp.com/send?phone=${shopPhone}&text=${encodeURIComponent(msg)}`;
+  const url1 = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+  const url2 = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
 
-  window.open(url, '_blank');
+  // Try opening
+  window.open(url1, '_blank');
+
+  // Fallback after delay
+  setTimeout(() => {
+    window.open(url2, '_blank');
+  }, 1000);
 }
 </script>
 
