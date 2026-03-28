@@ -674,7 +674,7 @@
   </div>
 
  <!-- ITEM 6 -->
-  <div class="item" id="item-5" onclick="selectItem(event,'item-5')">
+  <div class="item" id="item-6" onclick="selectItem(event,'item-6')">
     <div class="check-badge">✓</div>
     <img src="sai.webp" loading="lazy" alt="sai">
     <div class="details">
@@ -686,7 +686,7 @@
     </div>
     <div class="qty-wrapper">
       <span class="qty-label">Quantity</span>
-      <select class="qty-select" onchange="onQtyChange(event,'item-5')">
+      <select class="qty-select" onchange="onQtyChange(event,'item-6')">
         <option value="0">— kg</option>
         <option value="0.5">½ kg</option>
         <option value="1">1 kg</option>
@@ -698,7 +698,7 @@
   </div>
 
  <!-- ITEM 7 -->
-  <div class="item" id="item-5" onclick="selectItem(event,'item-5')">
+  <div class="item" id="item-7" onclick="selectItem(event,'item-7')">
     <div class="check-badge">✓</div>
     <img src="chin.webp" loading="lazy" alt="Chin">
     <div class="details">
@@ -710,7 +710,7 @@
     </div>
     <div class="qty-wrapper">
       <span class="qty-label">Quantity</span>
-      <select class="qty-select" onchange="onQtyChange(event,'item-5')">
+      <select class="qty-select" onchange="onQtyChange(event,'item-7')">
         <option value="0">— kg</option>
         <option value="0.5">½ kg</option>
         <option value="1">1 kg</option>
@@ -740,9 +740,25 @@
 <!-- ONLY SCRIPT PART CHANGED BELOW -->
 
 <script>
-const PRICES = { 'item-1':135, 'item-2':115, 'item-3':85, 'item-4':120, 'item-5':100 };
-const NAMES  = { 'item-1':'Kandipappu', 'item-2':'Minapappu', 'item-3':'Senagapappu', 'item-4':'Pesarapappu', 'item-5':'Masoor Dal' };
+const PRICES = {
+  'item-1':135,
+  'item-2':115,
+  'item-3':85,
+  'item-4':120,
+  'item-5':100,
+  'item-6':90,
+  'item-7':170
+};
 
+const NAMES = {
+  'item-1':'Kandipappu',
+  'item-2':'Minapappu',
+  'item-3':'Senagapappu',
+  'item-4':'Pesarapappu',
+  'item-5':'Pachi Senagapappu',
+  'item-6':'Saipappu',
+  'item-7':'Chintapandu'
+};
 let toastTimer = null;
 
 /* ✅ FIXED CLICK ISSUE */
@@ -789,7 +805,7 @@ function onQtyChange(e, id) {
 
 /* summary */
 function updateSummary() {
-  const ids  = ['item-1','item-2','item-3','item-4','item-5'];
+  const ids  = ['item-1','item-2','item-3','item-4','item-5','item-6','item-7'];
   const name = document.getElementById('customerName').value.trim();
 
   let html  = '';
@@ -861,7 +877,7 @@ function showToast(msg) {
 /* whatsapp */
 function sendToWhatsApp() {
   const name = document.getElementById('customerName').value.trim();
-  const ids  = ['item-1','item-2','item-3','item-4','item-5'];
+  const ids  = ['item-1','item-2','item-3','item-4','item-5','item-6','item-7'];
 
   if (!name) {
     showToast('⚠ Please enter your Full Name');
