@@ -843,7 +843,7 @@
       const qty = parseFloat(document.getElementById(id).querySelector('select').value);
       if (qty > 0) {
         const it = PRICES[id] * qty;
-        lines += ${count}. ${NAMES[id]} — ${qty} kg — Rs.${it.toFixed(0)}%0A;
+        lines += `${count}. ${NAMES[id]} — ${qty} kg — Rs.${it.toFixed(0)}%0A`;
         total += it;
         count++;
         hasItems = true;
@@ -856,17 +856,17 @@
       return;
     }
 
-    let msg = 🛒 *New Order — Nellore Basket*%0A;
-    msg += ━━━━━━━━━━━━━━━━━━%0A;
-    msg += 👤 *Name:* ${name}%0A;
-    msg += ━━━━━━━━━━━━━━━━━━%0A;
-    msg += 📦 *Items:*%0A${lines};
-    msg += ━━━━━━━━━━━━━━━━━━%0A;
-    msg += 💰 *Grand Total: Rs.${total.toFixed(0)}*;
+    let msg = `🛒 *New Order — Nellore Basket*%0A`;
+    msg += `━━━━━━━━━━━━━━━━━━%0A`;
+    msg += `👤 *Name:* ${name}%0A`;
+    msg += `━━━━━━━━━━━━━━━━━━%0A`;
+    msg += `📦 *Items:*%0A${lines}`;
+    msg += `━━━━━━━━━━━━━━━━━━%0A`;
+    msg += `💰 *Grand Total: Rs.${total.toFixed(0)}*`;
 
     // ✅ Replace with your number (country code + number, no + or spaces)
-    const shopPhone = '+91 8008970033';
-    window.open(https://wa.me/${shopPhone}?text=${msg}, '_blank');
+    const shopPhone = '91XXXXXXXXXX';
+    window.open(`https://wa.me/${shopPhone}?text=${msg}`, '_blank');
   }
 </script>
 
