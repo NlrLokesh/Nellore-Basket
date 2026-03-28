@@ -530,9 +530,13 @@
 
   <div class="section-title">✦ Your Details</div>
   <div class="customer-card">
-    <div class="input-group">
+    <div class="input-group" style="margin-bottom: 10px;">
       <span class="input-icon">👤</span>
       <input type="text" id="customerName" placeholder="Full Name" oninput="updateSummary()" />
+    </div>
+    <div class="input-group">
+      <span class="input-icon">📞</span>
+      <input type="tel" id="customerPhone" placeholder="Phone Number" maxlength="10" />
     </div>
   </div>
 
@@ -816,12 +820,14 @@
 
     emptyEl.style.display = 'none';
 
+    const custPhone = document.getElementById('customerPhone').value.trim();
     customerEl.innerHTML = name
       ? `<div class="summary-customer">
            <div class="cust-icon">👤</div>
            <div class="cust-info">
              <span class="cust-label">Order for</span>
              <span class="cust-name">${name}</span>
+             ${custPhone ? `<span style="font-size:11px;color:#b0b0b0;margin-top:2px;font-family:'Montserrat',sans-serif;font-weight:500;">📞 ${custPhone}</span>` : ''}
            </div>
          </div>`
       : '';
@@ -892,7 +898,8 @@
       return;
     }
 
-    const msg = `🛒 *Nellore Basket Order*\n👤 Name: ${name}\n\n${lines}\n💰 *Total: Rs.${total.toFixed(0)}*`;
+    const custPhone2 = document.getElementById('customerPhone').value.trim();
+    const msg = `🛒 *Nellore Basket Order*\n👤 Name: ${name}\n📞 Phone: ${custPhone2 || 'Not provided'}\n\n${lines}\n💰 *Total: Rs.${total.toFixed(0)}*`;
 
     // ✅ Your number
     const phone = '918008970033';
