@@ -856,7 +856,7 @@ function sendToWhatsApp() {
   // ✅ BEST universal WhatsApp link
   const url = `https://api.whatsapp.com/send?phone=${shopPhone}&text=${encodeURIComponent(msg)}`;
 
-  window.location.href = url;
+  window.open(url, '_blank');
 }
 </script>
 
