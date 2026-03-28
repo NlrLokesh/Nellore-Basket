@@ -8,248 +8,206 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-/* KEEPING YOUR ORIGINAL CSS — only added tracker style */
-
-#kgTracker {
-  margin:10px 0 15px;
-  background:#111;
-  border:1px solid #333;
-  border-radius:10px;
-  padding:10px;
-  font-size:12px;
-  text-align:center;
-  color:#aaa;
+/* KEEPING YOUR DESIGN SAME */
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: #050505;
+  color: white;
 }
-#kgBar {
-  height:6px;
-  background:linear-gradient(90deg,#d4af37,#f7d774);
-  width:0%;
-  border-radius:10px;
-  transition:0.3s;
+
+.container {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+}
+
+.section-title {
+  margin-top: 20px;
+  color: gold;
+}
+
+.customer-card input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #111;
+  color: white;
+}
+
+/* Progress bar */
+.progress-box {
+  margin: 15px 0;
+}
+.progress-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #aaa;
+}
+.progress-bar-bg {
+  height: 6px;
+  background: #111;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, gold, #f7d774);
+  transition: 0.3s;
+}
+
+/* Items */
+.item {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 10px;
+}
+
+select {
+  background: #111;
+  color: white;
+  border-radius: 6px;
+}
+
+/* Summary */
+.summary-card {
+  border: 1px solid #333;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 8px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="toast" id="toast"></div>
-
 <div class="container">
 
-<!-- YOUR DETAILS -->
+<!-- DETAILS -->
 <div class="section-title">✦ Your Details</div>
-
 <div class="customer-card">
-  <div class="input-group">
-    <span class="input-icon">👤</span>
-    <input type="text" id="customerName" placeholder="Full Name" oninput="updateSummary()" />
-  </div>
+  <input type="text" id="customerName" placeholder="Full Name" oninput="updateSummary()">
+  <input type="tel" id="customerPhone" placeholder="Phone Number" oninput="updateSummary()">
+</div>
 
-  <!-- ✅ ADDED PHONE -->
-  <div class="input-group" style="margin-top:10px;">
-    <span class="input-icon">📱</span>
-    <input type="tel" id="customerPhone" placeholder="Phone Number" oninput="updateSummary()" />
+<!-- PROGRESS -->
+<div class="progress-box">
+  <div class="progress-top">
+    <span>Minimum Order</span>
+    <span id="kgText">0 / 8 kg</span>
+  </div>
+  <div class="progress-bar-bg">
+    <div id="kgBar" class="progress-bar-fill"></div>
   </div>
 </div>
 
 <!-- ITEMS -->
 <div class="section-title">✦ Select Items</div>
 
-<!-- ✅ KG TRACKER -->
-<div id="kgTracker">
-  <span id="kgText">0 / 8 kg selected</span>
-  <div style="background:#222;margin-top:6px;border-radius:10px;overflow:hidden;">
-    <div id="kgBar"></div>
-  </div>
+<div class="item">
+  <span>Kandipappu (₹135/kg)</span>
+  <select onchange="updateSummary()" id="q1">
+    <option value="0">0</option><option>1</option><option>2</option><option>3</option>
+  </select>
 </div>
 
-<!-- YOUR ITEMS (UNCHANGED) -->
-<!-- KEEP YOUR EXISTING ITEMS HERE EXACTLY (no change needed) -->
+<div class="item">
+  <span>Minapappu (₹115/kg)</span>
+  <select onchange="updateSummary()" id="q2">
+    <option value="0">0</option><option>1</option><option>2</option><option>3</option>
+  </select>
+</div>
+
+<div class="item">
+  <span>Senagapappu (₹85/kg)</span>
+  <select onchange="updateSummary()" id="q3">
+    <option value="0">0</option><option>1</option><option>2</option><option>3</option>
+  </select>
+</div>
 
 <!-- SUMMARY -->
 <div class="section-title">✦ Order Summary</div>
+<div class="summary-card" id="summary"></div>
 
-<div class="summary-card">
-  <div class="summary-empty" id="summaryEmpty">No items selected yet</div>
-  <div id="summaryCustomer"></div>
-  <div id="summaryRows"></div>
-</div>
-
-<button class="btn-whatsapp" onclick="sendToWhatsApp()">
-💬 Place Order on WhatsApp
-</button>
+<button class="btn" onclick="orderNow()">Place Order on WhatsApp</button>
 
 </div>
 
 <script>
-const MIN_KG = 8;
+const prices = [135,115,85];
+const names = ["Kandipappu","Minapappu","Senagapappu"];
 
-const PRICES = {
-  'item-1':135,
-  'item-2':115,
-  'item-3':85,
-  'item-4':120,
-  'item-5':100,
-  'item-6':90,
-  'item-7':170
-};
-
-const NAMES = {
-  'item-1':'Kandipappu',
-  'item-2':'Minapappu',
-  'item-3':'Senagapappu',
-  'item-4':'Pesarapappu',
-  'item-5':'Pachi Senagapappu',
-  'item-6':'Saipappu',
-  'item-7':'Chintapandu'
-};
-
-let toastTimer;
-
-/* SAME SELECT LOGIC */
-function selectItem(e, id) {
-  if (e.target.closest('select')) return;
-
-  const item = document.getElementById(id);
-  const sel  = item.querySelector('select');
-
-  if (item.classList.contains('active')) {
-    item.classList.remove('active','selected','error');
-    sel.value = '0';
-    updateSummary();
-    return;
-  }
-
-  if (item.classList.contains('selected')) {
-    item.classList.remove('selected','error');
-    sel.value = '0';
-    return;
-  }
-
-  item.classList.add('selected');
-}
-
-/* SAME QTY */
-function onQtyChange(e, id) {
-  e.stopPropagation();
-
-  const item = document.getElementById(id);
-  const sel  = item.querySelector('select');
-
-  if (parseFloat(sel.value) > 0) {
-    item.classList.add('active');
-    item.classList.remove('selected','error');
-  } else {
-    item.classList.remove('active');
-    item.classList.add('selected');
-  }
-
-  updateSummary();
-}
-
-/* UPDATED SUMMARY */
-function updateSummary() {
-  const ids = Object.keys(PRICES);
-  const name = document.getElementById('customerName').value.trim();
-  const phone = document.getElementById('customerPhone').value.trim();
-
+function updateSummary(){
   let total = 0;
   let totalKg = 0;
-  let html = '';
-  let hasItems = false;
+  let html = "";
 
-  ids.forEach(id => {
-    const qty = parseFloat(document.getElementById(id)?.querySelector('select')?.value || 0);
-
-    if (qty > 0) {
-      const price = PRICES[id] * qty;
-      total += price;
-      totalKg += qty;
-      hasItems = true;
-
-      html += `
-      <div class="summary-row">
-        <span class="s-name">${NAMES[id]}</span>
-        <span class="s-qty">${qty} kg</span>
-        <span class="s-price">₹ ${price}</span>
-      </div>`;
-    }
-  });
-
-  /* KG TRACK */
-  document.getElementById('kgText').innerText = `${totalKg} / ${MIN_KG} kg selected`;
-  document.getElementById('kgBar').style.width = Math.min((totalKg / MIN_KG)*100,100) + "%";
-
-  const emptyEl = document.getElementById('summaryEmpty');
-  const customerEl = document.getElementById('summaryCustomer');
-  const rowsEl = document.getElementById('summaryRows');
-
-  if (!hasItems) {
-    emptyEl.style.display = 'block';
-    customerEl.innerHTML = '';
-    rowsEl.innerHTML = '';
-    return;
-  }
-
-  emptyEl.style.display = 'none';
-
-  /* CUSTOMER DISPLAY */
-  customerEl.innerHTML = `
-  <div class="summary-customer">
-    <div class="cust-icon">👤</div>
-    <div class="cust-info">
-      <span class="cust-name">${name}</span>
-      <span style="font-size:12px;color:#aaa;">📱 ${phone}</span>
-    </div>
-  </div>`;
-
-  html += `
-  <div class="summary-total">
-    <span class="t-label">Total</span>
-    <span class="t-amount">₹ ${total}</span>
-  </div>`;
-
-  rowsEl.innerHTML = html;
-}
-
-/* TOAST */
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.innerText = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>t.classList.remove('show'),3000);
-}
-
-/* WHATSAPP */
-function sendToWhatsApp() {
-  const name = document.getElementById('customerName').value.trim();
-  const phone = document.getElementById('customerPhone').value.trim();
-
-  if (!name) return showToast("Enter Name");
-  if (!phone) return showToast("Enter Phone");
-
-  let totalKg = 0;
-  let total = 0;
-  let msg = `🛒 Nellore Basket Order\n👤 ${name}\n📱 ${phone}\n\n`;
-
-  Object.keys(PRICES).forEach(id=>{
-    const qty = parseFloat(document.getElementById(id)?.querySelector('select')?.value || 0);
+  for(let i=1;i<=3;i++){
+    let qty = parseFloat(document.getElementById("q"+i).value);
     if(qty>0){
-      let price = PRICES[id]*qty;
+      let cost = qty * prices[i-1];
+      total += cost;
       totalKg += qty;
-      total += price;
-      msg += `${NAMES[id]} ${qty}kg - ₹${price}\n`;
+      html += `${names[i-1]} - ${qty}kg = ₹${cost}<br>`;
     }
-  });
-
-  if(totalKg < MIN_KG){
-    return showToast("Minimum 8kg required");
   }
 
-  msg += `\n📦 Total Qty: ${totalKg}kg\n💰 ₹${total}`;
+  document.getElementById("summary").innerHTML = html + "<br>Total: ₹"+total;
 
-  window.open(`https://wa.me/918008970033?text=${encodeURIComponent(msg)}`);
+  // progress bar
+  let percent = Math.min((totalKg/8)*100,100);
+  document.getElementById("kgBar").style.width = percent+"%";
+  document.getElementById("kgText").innerText = totalKg+" / 8 kg";
+}
+
+function orderNow(){
+  let name = document.getElementById("customerName").value;
+  let phone = document.getElementById("customerPhone").value;
+
+  if(!name){
+    alert("Enter name");
+    return;
+  }
+
+  if(!phone || phone.length<10){
+    alert("Enter valid phone");
+    return;
+  }
+
+  let msg = "🛒 Nellore Basket Order\n";
+  msg += "Name: "+name+"\nPhone: "+phone+"\n\n";
+
+  let totalKg = 0;
+
+  for(let i=1;i<=3;i++){
+    let qty = parseFloat(document.getElementById("q"+i).value);
+    if(qty>0){
+      msg += names[i-1]+" - "+qty+"kg\n";
+      totalKg += qty;
+    }
+  }
+
+  if(totalKg < 8){
+    alert("Minimum 8kg required");
+    return;
+  }
+
+  window.open("https://wa.me/918008970033?text="+encodeURIComponent(msg));
 }
 </script>
 
