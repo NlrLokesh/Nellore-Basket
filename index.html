@@ -561,7 +561,17 @@
         <option value="1">1 kg</option>
         <option value="1.5">1.5 kg</option>
         <option value="2">2 kg</option>
+        <option value="2.5">2.5 kg</option>
         <option value="3">3 kg</option>
+        <option value="3.5">3.5 kg</option>
+        <option value="4">4 kg</option>
+        <option value="4.5">4.5 kg</option>
+        <option value="5">5 kg</option>
+        <option value="6">6 kg</option>
+        <option value="7">7 kg</option>
+        <option value="8">8 kg</option>
+        <option value="9">9 kg</option>
+        <option value="10">10 kg</option>
       </select>
     </div>
   </div>
@@ -585,7 +595,17 @@
         <option value="1">1 kg</option>
         <option value="1.5">1.5 kg</option>
         <option value="2">2 kg</option>
+        <option value="2.5">2.5 kg</option>
         <option value="3">3 kg</option>
+        <option value="3.5">3.5 kg</option>
+        <option value="4">4 kg</option>
+        <option value="4.5">4.5 kg</option>
+        <option value="5">5 kg</option>
+        <option value="6">6 kg</option>
+        <option value="7">7 kg</option>
+        <option value="8">8 kg</option>
+        <option value="9">9 kg</option>
+        <option value="10">10 kg</option>
       </select>
     </div>
   </div>
@@ -609,7 +629,17 @@
         <option value="1">1 kg</option>
         <option value="1.5">1.5 kg</option>
         <option value="2">2 kg</option>
+        <option value="2.5">2.5 kg</option>
         <option value="3">3 kg</option>
+        <option value="3.5">3.5 kg</option>
+        <option value="4">4 kg</option>
+        <option value="4.5">4.5 kg</option>
+        <option value="5">5 kg</option>
+        <option value="6">6 kg</option>
+        <option value="7">7 kg</option>
+        <option value="8">8 kg</option>
+        <option value="9">9 kg</option>
+        <option value="10">10 kg</option>
       </select>
     </div>
   </div>
@@ -633,7 +663,17 @@
         <option value="1">1 kg</option>
         <option value="1.5">1.5 kg</option>
         <option value="2">2 kg</option>
+        <option value="2.5">2.5 kg</option>
         <option value="3">3 kg</option>
+        <option value="3.5">3.5 kg</option>
+        <option value="4">4 kg</option>
+        <option value="4.5">4.5 kg</option>
+        <option value="5">5 kg</option>
+        <option value="6">6 kg</option>
+        <option value="7">7 kg</option>
+        <option value="8">8 kg</option>
+        <option value="9">9 kg</option>
+        <option value="10">10 kg</option>
       </select>
     </div>
   </div>
@@ -657,7 +697,17 @@
         <option value="1">1 kg</option>
         <option value="1.5">1.5 kg</option>
         <option value="2">2 kg</option>
+        <option value="2.5">2.5 kg</option>
         <option value="3">3 kg</option>
+        <option value="3.5">3.5 kg</option>
+        <option value="4">4 kg</option>
+        <option value="4.5">4.5 kg</option>
+        <option value="5">5 kg</option>
+        <option value="6">6 kg</option>
+        <option value="7">7 kg</option>
+        <option value="8">8 kg</option>
+        <option value="9">9 kg</option>
+        <option value="10">10 kg</option>
       </select>
     </div>
   </div>
@@ -681,7 +731,17 @@
         <option value="1">1 kg</option>
         <option value="1.5">1.5 kg</option>
         <option value="2">2 kg</option>
+        <option value="2.5">2.5 kg</option>
         <option value="3">3 kg</option>
+        <option value="3.5">3.5 kg</option>
+        <option value="4">4 kg</option>
+        <option value="4.5">4.5 kg</option>
+        <option value="5">5 kg</option>
+        <option value="6">6 kg</option>
+        <option value="7">7 kg</option>
+        <option value="8">8 kg</option>
+        <option value="9">9 kg</option>
+        <option value="10">10 kg</option>
       </select>
     </div>
   </div>
@@ -705,7 +765,17 @@
         <option value="1">1 kg</option>
         <option value="1.5">1.5 kg</option>
         <option value="2">2 kg</option>
+        <option value="2.5">2.5 kg</option>
         <option value="3">3 kg</option>
+        <option value="3.5">3.5 kg</option>
+        <option value="4">4 kg</option>
+        <option value="4.5">4.5 kg</option>
+        <option value="5">5 kg</option>
+        <option value="6">6 kg</option>
+        <option value="7">7 kg</option>
+        <option value="8">8 kg</option>
+        <option value="9">9 kg</option>
+        <option value="10">10 kg</option>
       </select>
     </div>
   </div>
@@ -827,7 +897,7 @@
            <div class="cust-info">
              <span class="cust-label">Order for</span>
              <span class="cust-name">${name}</span>
-             ${custPhone ? <span style="font-size:11px;color:#b0b0b0;margin-top:2px;font-family:'Montserrat',sans-serif;font-weight:500;">📞 ${custPhone}</span> : ''}
+             ${custPhone ? `<span style="font-size:11px;color:#b0b0b0;margin-top:2px;font-family:'Montserrat',sans-serif;font-weight:500;">📞 ${custPhone}</span>` : ''}
            </div>
          </div>`
       : '';
@@ -886,7 +956,7 @@
       const qty = parseFloat(document.getElementById(id).querySelector('select').value);
       if (qty > 0) {
         const it = PRICES[id] * qty;
-        lines += ${count}. ${NAMES[id]} - ${qty}kg - Rs.${it.toFixed(0)}\n;
+        lines += `${count}. ${NAMES[id]} - ${qty}kg - Rs.${it.toFixed(0)}\n`;
         total += it;
         count++;
         hasItems = true;
@@ -898,12 +968,32 @@
       return;
     }
 
-    const custPhone2 = document.getElementById('customerPhone').value.trim();
-    const msg = 🛒 *Nellore Basket Order*\n👤 Name: ${name}\n📞 Phone: ${custPhone2 || 'Not provided'}\n\n${lines}\n💰 *Total: Rs.${total.toFixed(0)}*;
+    // ── Get GPS location then send ──
+    showToast('📍 Getting your location...');
 
-    // ✅ Your number
-    const phone = '918008970033';
-    window.open(https://wa.me/${phone}?text=${encodeURIComponent(msg)}, '_blank');
+    function buildAndSend(locationText) {
+      const custPhone2 = document.getElementById('customerPhone').value.trim();
+      const msg = `🛒 *Nellore Basket Order*\n👤 Name: ${name}\n📞 Phone: ${custPhone2 || 'Not provided'}\n📍 Location: ${locationText}\n\n${lines}\n💰 *Total: Rs.${total.toFixed(0)}*`;
+      const phone = '918008970033';
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          const lat = pos.coords.latitude.toFixed(7);
+          const lng = pos.coords.longitude.toFixed(7);
+          const mapsLink = `https://maps.google.com/?q=${lat},${lng}`;
+          buildAndSend(`${lat}, ${lng} — ${mapsLink}`);
+        },
+        function(err) {
+          buildAndSend('Location not shared');
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    } else {
+      buildAndSend('Location not supported');
+    }
   }
 </script>
 
