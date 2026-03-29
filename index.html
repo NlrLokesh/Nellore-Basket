@@ -555,10 +555,7 @@
     </div>
     <div class="qty-wrapper">
       <span class="qty-label">Quantity</span>
-     <select class="qty-select"
-        onclick="activateDropdown(event,'item-1')"
-        onfocus="activateDropdown(event,'item-1')"
-        onchange="onQtyChange(event,'item-1')">
+      <select class="qty-select" onchange="onQtyChange(event,'item-1')">
         <option value="0">— kg</option>
         <option value="0.5">½ kg</option>
         <option value="1">1 kg</option>
@@ -582,10 +579,7 @@
     </div>
     <div class="qty-wrapper">
       <span class="qty-label">Quantity</span>
-      <select class="qty-select"
-        onclick="activateDropdown(event,'item-2')"
-        onfocus="activateDropdown(event,'item-2')"
-        onchange="onQtyChange(event,'item-2')">
+      <select class="qty-select" onchange="onQtyChange(event,'item-2')">
         <option value="0">— kg</option>
         <option value="0.5">½ kg</option>
         <option value="1">1 kg</option>
@@ -609,10 +603,7 @@
     </div>
     <div class="qty-wrapper">
       <span class="qty-label">Quantity</span>
-      <select class="qty-select"
-        onclick="activateDropdown(event,'item-3')"
-        onfocus="activateDropdown(event,'item-3')"
-        onchange="onQtyChange(event,'item-3')">
+      <select class="qty-select" onchange="onQtyChange(event,'item-3')">
         <option value="0">— kg</option>
         <option value="0.5">½ kg</option>
         <option value="1">1 kg</option>
@@ -636,10 +627,7 @@
     </div>
     <div class="qty-wrapper">
       <span class="qty-label">Quantity</span>
-      <select class="qty-select"
-        onclick="activateDropdown(event,'item-4')"
-        onfocus="activateDropdown(event,'item-4')"
-        onchange="onQtyChange(event,'item-4')">
+      <select class="qty-select" onchange="onQtyChange(event,'item-4')">
         <option value="0">— kg</option>
         <option value="0.5">½ kg</option>
         <option value="1">1 kg</option>
@@ -663,10 +651,7 @@
     </div>
     <div class="qty-wrapper">
       <span class="qty-label">Quantity</span>
-      <select class="qty-select"
-        onclick="activateDropdown(event,'item-5')"
-        onfocus="activateDropdown(event,'item-5')"
-        onchange="onQtyChange(event,'item-5')">
+      <select class="qty-select" onchange="onQtyChange(event,'item-5')">
         <option value="0">— kg</option>
         <option value="0.5">½ kg</option>
         <option value="1">1 kg</option>
@@ -690,10 +675,7 @@
     </div>
     <div class="qty-wrapper">
       <span class="qty-label">Quantity</span>
-      <select class="qty-select"
-        onclick="activateDropdown(event,'item-6')"
-        onfocus="activateDropdown(event,'item-6')"
-        onchange="onQtyChange(event,'item-6')">
+      <select class="qty-select" onchange="onQtyChange(event,'item-6')">
         <option value="0">— kg</option>
         <option value="0.5">½ kg</option>
         <option value="1">1 kg</option>
@@ -717,10 +699,7 @@
     </div>
     <div class="qty-wrapper">
       <span class="qty-label">Quantity</span>
-      <select class="qty-select"
-        onclick="activateDropdown(event,'item-7')"
-        onfocus="activateDropdown(event,'item-7')"
-        onchange="onQtyChange(event,'item-7')">
+      <select class="qty-select" onchange="onQtyChange(event,'item-7')">
         <option value="0">— kg</option>
         <option value="0.5">½ kg</option>
         <option value="1">1 kg</option>
@@ -747,214 +726,185 @@
 </div>
 
 <script>
-const PRICES = {
-  'item-1': 115,
-  'item-2': 135,
-  'item-3': 160,
-  'item-4': 110,
-  'item-5': 85,
-  'item-6': 90,
-  'item-7': 170
-};
+  // ✅ Prices matched correctly to items 1–7
+  const PRICES = {
+    'item-1': 115,  // Minapappu
+    'item-2': 135,  // Kandipappu
+    'item-3': 160,  // Veru Senagapappu
+    'item-4': 110,  // Pesalapappu
+    'item-5': 85,   // Pachi Senagapappu
+    'item-6': 90,   // Saipappu
+    'item-7': 170   // Chintapandu
+  };
 
-const NAMES = {
-  'item-1': 'Minapappu',
-  'item-2': 'Kandipappu',
-  'item-3': 'Veru Senagapappu',
-  'item-4': 'Pesalapappu',
-  'item-5': 'Pachi Senagapappu',
-  'item-6': 'Saipappu',
-  'item-7': 'Chintapandu'
-};
+  const NAMES = {
+    'item-1': 'Minapappu',
+    'item-2': 'Kandipappu',
+    'item-3': 'Veru Senagapappu',
+    'item-4': 'Pesalapappu',
+    'item-5': 'Pachi Senagapappu',
+    'item-6': 'Saipappu',
+    'item-7': 'Chintapandu'
+  };
 
-const ALL_IDS = ['item-1','item-2','item-3','item-4','item-5','item-6','item-7'];
+  const ALL_IDS = ['item-1','item-2','item-3','item-4','item-5','item-6','item-7'];
+  let toastTimer = null;
 
-let toastTimer = null;
+  function selectItem(e, id) {
+    if (e.target.closest('select')) return;
 
-// ✅ NEW FUNCTION (key fix)
-function activateDropdown(e, id) {
-  e.stopPropagation();
-  const item = document.getElementById(id);
+    const item = document.getElementById(id);
+    const sel  = item.querySelector('select');
 
-  if (!item.classList.contains('active')) {
+    if (item.classList.contains('active')) {
+      item.classList.remove('active', 'selected', 'error');
+      sel.value = '0';
+      updateSummary();
+      return;
+    }
+    if (item.classList.contains('selected')) {
+      item.classList.remove('selected', 'error');
+      sel.value = '0';
+      return;
+    }
+
     item.classList.add('selected');
     item.classList.remove('error');
   }
-}
 
-function selectItem(e, id) {
-  if (e.target.closest('select')) return;
+  function onQtyChange(e, id) {
+    e.stopPropagation();
+    const item = document.getElementById(id);
+    const sel  = item.querySelector('select');
 
-  const item = document.getElementById(id);
-  const sel = item.querySelector('select');
-
-  if (item.classList.contains('active')) {
-    item.classList.remove('active', 'selected', 'error');
-    sel.value = '0';
+    if (parseFloat(sel.value) > 0) {
+      item.classList.add('active');
+      item.classList.remove('selected', 'error');
+    } else {
+      item.classList.remove('active');
+      item.classList.add('selected');
+    }
     updateSummary();
-    return;
   }
 
-  if (item.classList.contains('selected')) {
-    item.classList.remove('selected', 'error');
-    sel.value = '0';
-    return;
-  }
+  function updateSummary() {
+    const name = document.getElementById('customerName').value.trim();
+    let html = '';
+    let total = 0;
+    let hasItems = false;
 
-  item.classList.add('selected');
-  item.classList.remove('error');
-}
-
-function onQtyChange(e, id) {
-  e.stopPropagation();
-
-  const item = document.getElementById(id);
-  const sel = item.querySelector('select');
-
-  if (parseFloat(sel.value) > 0) {
-    item.classList.add('active');
-    item.classList.remove('selected', 'error');
-  } else {
-    item.classList.remove('active');
-    item.classList.add('selected');
-  }
-
-  updateSummary();
-}
-
-function updateSummary() {
-  const name = document.getElementById('customerName').value.trim();
-  let html = '';
-  let total = 0;
-  let hasItems = false;
-
-  ALL_IDS.forEach(id => {
-    const qty = parseFloat(document.getElementById(id).querySelector('select').value);
-
-    if (qty > 0) {
-      const it = PRICES[id] * qty;
-      total += it;
-      hasItems = true;
-
-      html += `
-      <div class="summary-row">
-        <span class="s-name">${NAMES[id]}</span>
-        <span class="s-qty">${qty} kg</span>
-        <span class="s-price">&#8377; ${it.toFixed(0)}</span>
-      </div>`;
-    }
-  });
-
-  const emptyEl = document.getElementById('summaryEmpty');
-  const customerEl = document.getElementById('summaryCustomer');
-  const rowsEl = document.getElementById('summaryRows');
-
-  if (!hasItems) {
-    emptyEl.style.display = 'block';
-    customerEl.innerHTML = '';
-    rowsEl.innerHTML = '';
-    return;
-  }
-
-  emptyEl.style.display = 'none';
-
-  const custPhone = document.getElementById('customerPhone').value.trim();
-
-  customerEl.innerHTML = name ? `
-  <div class="summary-customer">
-    <div class="cust-icon">👤</div>
-    <div class="cust-info">
-      <span class="cust-label">Order for</span>
-      <span class="cust-name">${name}</span>
-      ${custPhone ? `<span style="font-size:11px;color:#b0b0b0;margin-top:2px;">📞 ${custPhone}</span>` : ''}
-    </div>
-  </div>` : '';
-
-  html += `
-  <div class="summary-total">
-    <span class="t-label">Grand Total</span>
-    <span class="t-amount">&#8377; ${total.toFixed(0)}</span>
-  </div>`;
-
-  rowsEl.innerHTML = html;
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-
-  if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-function sendToWhatsApp() {
-  const name = document.getElementById('customerName').value.trim();
-
-  if (!name) {
-    showToast('⚠ Please enter your Full Name');
-    document.getElementById('customerName').focus();
-    return;
-  }
-
-  let missingId = null;
-
-  ALL_IDS.forEach(id => {
-    if (!missingId) {
-      const item = document.getElementById(id);
-      const qty = parseFloat(item.querySelector('select').value);
-
-      if (item.classList.contains('selected') && qty === 0) {
-        missingId = id;
+    ALL_IDS.forEach(id => {
+      const qty = parseFloat(document.getElementById(id).querySelector('select').value);
+      if (qty > 0) {
+        const it = PRICES[id] * qty;
+        total += it;
+        hasItems = true;
+        html += `<div class="summary-row">
+          <span class="s-name">${NAMES[id]}</span>
+          <span class="s-qty">${qty} kg</span>
+          <span class="s-price">&#8377; ${it.toFixed(0)}</span>
+        </div>`;
       }
+    });
+
+    const emptyEl    = document.getElementById('summaryEmpty');
+    const customerEl = document.getElementById('summaryCustomer');
+    const rowsEl     = document.getElementById('summaryRows');
+
+    if (!hasItems) {
+      emptyEl.style.display = 'block';
+      customerEl.innerHTML  = '';
+      rowsEl.innerHTML      = '';
+      return;
     }
-  });
 
-  if (missingId) {
-    const item = document.getElementById(missingId);
-    item.classList.add('error');
+    emptyEl.style.display = 'none';
 
-    showToast('⚠ Please select Quantity for ' + NAMES[missingId]);
+    const custPhone = document.getElementById('customerPhone').value.trim();
+    customerEl.innerHTML = name
+      ? `<div class="summary-customer">
+           <div class="cust-icon">👤</div>
+           <div class="cust-info">
+             <span class="cust-label">Order for</span>
+             <span class="cust-name">${name}</span>
+             ${custPhone ? <span style="font-size:11px;color:#b0b0b0;margin-top:2px;font-family:'Montserrat',sans-serif;font-weight:500;">📞 ${custPhone}</span> : ''}
+           </div>
+         </div>`
+      : '';
 
-    setTimeout(() => item.classList.remove('error'), 2500);
-    return;
+    html += `<div class="summary-total">
+      <span class="t-label">Grand Total</span>
+      <span class="t-amount">&#8377; ${total.toFixed(0)}</span>
+    </div>`;
+
+    rowsEl.innerHTML = html;
   }
 
-  let lines = '';
-  let total = 0;
-  let count = 1;
-  let hasItems = false;
-
-  ALL_IDS.forEach(id => {
-    const qty = parseFloat(document.getElementById(id).querySelector('select').value);
-
-    if (qty > 0) {
-      const it = PRICES[id] * qty;
-      lines += `${count}. ${NAMES[id]} - ${qty}kg - Rs.${it.toFixed(0)}\n`;
-      total += it;
-      count++;
-      hasItems = true;
-    }
-  });
-
-  if (!hasItems) {
-    showToast('⚠ Please select at least one item');
-    return;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  const custPhone = document.getElementById('customerPhone').value.trim();
+  function sendToWhatsApp() {
+    const name = document.getElementById('customerName').value.trim();
 
-  const msg = `🛒 *Nellore Basket Order*
-👤 Name: ${name}
-📞 Phone: ${custPhone || 'Not provided'}
+    if (!name) {
+      showToast('⚠ Please enter your Full Name');
+      document.getElementById('customerName').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('customerName').focus();
+      return;
+    }
 
-${lines}
-💰 *Total: Rs.${total.toFixed(0)}*`;
+    // Check any selected-but-no-qty item
+    let missingId = null;
+    ALL_IDS.forEach(id => {
+      if (!missingId) {
+        const item = document.getElementById(id);
+        const qty  = parseFloat(item.querySelector('select').value);
+        if (item.classList.contains('selected') && qty === 0) missingId = id;
+      }
+    });
 
-  const phone = '918008970033';
+    if (missingId) {
+      const item = document.getElementById(missingId);
+      item.classList.add('error');
+      item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast('⚠ Please select a Quantity for ' + NAMES[missingId]);
+      setTimeout(() => item.classList.remove('error'), 2500);
+      return;
+    }
 
-  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
-}
+    let lines = '';
+    let total = 0;
+    let count = 1;
+    let hasItems = false;
+
+    ALL_IDS.forEach(id => {
+      const qty = parseFloat(document.getElementById(id).querySelector('select').value);
+      if (qty > 0) {
+        const it = PRICES[id] * qty;
+        lines += ${count}. ${NAMES[id]} - ${qty}kg - Rs.${it.toFixed(0)}\n;
+        total += it;
+        count++;
+        hasItems = true;
+      }
+    });
+
+    if (!hasItems) {
+      showToast('⚠ Please select at least one item');
+      return;
+    }
+
+    const custPhone2 = document.getElementById('customerPhone').value.trim();
+    const msg = 🛒 *Nellore Basket Order*\n👤 Name: ${name}\n📞 Phone: ${custPhone2 || 'Not provided'}\n\n${lines}\n💰 *Total: Rs.${total.toFixed(0)}*;
+
+    // ✅ Your number
+    const phone = '918008970033';
+    window.open(https://wa.me/${phone}?text=${encodeURIComponent(msg)}, '_blank');
+  }
 </script>
 
 </body>
