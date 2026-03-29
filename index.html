@@ -340,7 +340,7 @@
     </div>
     <div class="input-group">
       <span class="input-icon">&#128222;</span>
-      <input type="tel" id="customerPhone" placeholder="Phone Number" maxlength="10" oninput="updateSummary()" />
+      <input type="tel" id="customerPhone" placeholder="Phone Number (10 digits)" maxlength="10" oninput="filterPhone(this); updateSummary();" />
     </div>
   </div>
 
@@ -686,10 +686,32 @@
       customerEl.innerHTML = '';
     }
 
+    /* Min order progress */
+    var totalKg = 0;
+    for (var m = 0; m < ALL_IDS.length; m++) {
+      totalKg += parseFloat(document.getElementById(ALL_IDS[m]).querySelector('select').value) || 0;
+    }
+    var progressPct = Math.min((totalKg / 8) * 100, 100);
+    var kgLeft = totalKg >= 8 ? 0 : (8 - totalKg);
+    var progressColor = totalKg >= 8 ? '#d4af37' : '#555';
+    var progressMsg = totalKg >= 8
+      ? '&#10003; Minimum order reached (' + totalKg + ' kg)'
+      : totalKg + ' kg of 8 kg minimum &mdash; add ' + kgLeft.toFixed(1).replace('.0','') + ' kg more';
+
     html += '<div class="summary-total">'
       + '<span class="t-label">Grand Total</span>'
       + '<span class="t-amount">&#8377; ' + total.toFixed(0) + '</span>'
       + '</div>';
+
+    html += '<div style="margin-top:14px;">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">'
+      + '<span style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:' + progressColor + ';font-weight:700;">' + progressMsg + '</span>'
+      + '</div>'
+      + '<div style="height:4px;background:#1e1e1e;border-radius:4px;overflow:hidden;">'
+      + '<div style="height:100%;width:' + progressPct + '%;background:linear-gradient(90deg,#a67c00,' + (totalKg >= 8 ? '#f7d774' : '#d4af37') + ');border-radius:4px;transition:width 0.4s ease;"></div>'
+      + '</div>'
+      + '</div>';
+
     rowsEl.innerHTML = html;
   }
 
@@ -731,10 +753,17 @@
     window.open('https://wa.me/918008970033?text=' + msg, '_blank');
   }
 
+  /* Allow only digits in phone field */
+  function filterPhone(input) {
+    input.value = input.value.replace(/[^0-9]/g, '');
+  }
+
   /* Place Order button */
   function sendToWhatsApp() {
-    var name = document.getElementById('customerName').value.trim();
+    var name      = document.getElementById('customerName').value.trim();
+    var custPhone = document.getElementById('customerPhone').value.trim();
 
+    /* 1. Name check */
     if (!name) {
       showToast('Please enter your Full Name');
       document.getElementById('customerName').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -742,7 +771,21 @@
       return;
     }
 
-    /* Check selected item without qty */
+    /* 2. Phone validation — must be exactly 10 digits starting with 6,7,8 or 9 */
+    if (!custPhone) {
+      showToast('Please enter your Phone Number');
+      document.getElementById('customerPhone').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('customerPhone').focus();
+      return;
+    }
+    if (custPhone.length !== 10 || !/^[6-9][0-9]{9}$/.test(custPhone)) {
+      showToast('Enter a valid 10-digit Indian mobile number');
+      document.getElementById('customerPhone').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('customerPhone').focus();
+      return;
+    }
+
+    /* 3. Check selected item without qty */
     var missingId = null;
     for (var i = 0; i < ALL_IDS.length; i++) {
       var id   = ALL_IDS[i];
@@ -759,7 +802,7 @@
       return;
     }
 
-    /* Check at least one item */
+    /* 4. Check at least one item */
     var hasItems = false;
     for (var j = 0; j < ALL_IDS.length; j++) {
       if (parseFloat(document.getElementById(ALL_IDS[j]).querySelector('select').value) > 0) {
@@ -768,7 +811,18 @@
     }
     if (!hasItems) { showToast('Please select at least one item'); return; }
 
-    /* Get GPS location then send */
+    /* 5. Minimum 8 kg total order check */
+    var totalKg = 0;
+    for (var k = 0; k < ALL_IDS.length; k++) {
+      totalKg += parseFloat(document.getElementById(ALL_IDS[k]).querySelector('select').value) || 0;
+    }
+    if (totalKg < 8) {
+      var remaining = (8 - totalKg).toFixed(1).replace('.0','');
+      showToast('Minimum order is 8 kg. Add ' + remaining + ' kg more to place order.');
+      return;
+    }
+
+    /* 6. Get GPS location then send */
     showToast('Getting your location...', 'info');
 
     if (navigator.geolocation) {
