@@ -30,6 +30,7 @@
     overflow-x: hidden;
   }
 
+  /* ── HEADER (sticky) ── */
   header {
     background: var(--black-mid);
     border-bottom: 1px solid var(--gold-dark);
@@ -42,16 +43,12 @@
   }
   header::before {
     content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
     background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
   }
   header::after {
     content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 1px;
+    position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
     background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
   }
   .header-tag {
@@ -69,8 +66,10 @@
     margin-top: 5px; font-weight: 300; text-transform: uppercase;
   }
 
+  /* ── CONTAINER ── */
   .container { max-width: 500px; margin: 0 auto; padding: 20px 15px 30px; }
 
+  /* ── SECTION TITLE ── */
   .section-title {
     display: flex; align-items: center; gap: 10px;
     font-size: 9px; font-weight: 700; letter-spacing: 3px;
@@ -81,6 +80,7 @@
     background: linear-gradient(90deg, var(--gold-dark), transparent);
   }
 
+  /* ── CUSTOMER CARD ── */
   .customer-card {
     background: var(--black-card); border: 1px solid var(--black-border);
     border-radius: 14px; padding: 18px; position: relative; overflow: hidden;
@@ -107,6 +107,48 @@
     transform: translateY(-50%); font-size: 14px; pointer-events: none;
   }
 
+  /* ── TABS ── */
+  .tabs-wrapper {
+    display: flex;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--black-border);
+    margin-bottom: 16px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 12px 8px;
+    background: var(--black-card);
+    color: #555;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    outline: none;
+  }
+  .tab-btn:first-child { border-right: 1px solid var(--black-border); }
+  .tab-btn.active {
+    background: #1c1800;
+    color: var(--gold-light);
+  }
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
+  }
+  .tab-btn .tab-icon { font-size: 14px; display: block; margin-bottom: 3px; }
+
+  /* ── TAB PANELS ── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── ITEM CARD ── */
   .item {
     display: flex; align-items: center;
     background: var(--black-card); border: 1px solid var(--black-border);
@@ -162,19 +204,16 @@
   .item.active img { border-color: var(--gold-dark); box-shadow: 0 0 12px rgba(212,175,55,0.2); }
 
   .details { flex: 1; margin-left: 13px; }
-
   .item-name {
     font-family: 'Playfair Display', serif; font-size: 16px;
     font-weight: 700; color: #ffffff; transition: color 0.3s;
   }
   .item.selected .item-name, .item.active .item-name { color: var(--gold-light); }
-
   .item-sub {
     font-size: 9px; letter-spacing: 2px; color: #b0b0b0;
     text-transform: uppercase; margin-top: 3px; font-weight: 600; transition: color 0.3s;
   }
   .item.active .item-sub { color: var(--gold-dark); }
-
   .item-price {
     font-family: 'Montserrat', sans-serif; font-size: 14px;
     font-weight: 600; color: var(--gold); margin-top: 7px; letter-spacing: 0.3px;
@@ -192,6 +231,7 @@
     font-family: 'Montserrat', sans-serif;
   }
 
+  /* ── QUANTITY ── */
   .qty-wrapper {
     display: flex; flex-direction: column; align-items: center; gap: 5px; margin-right: 30px;
   }
@@ -225,13 +265,16 @@
     box-shadow: 0 0 0 1px rgba(255,77,77,0.5) !important;
   }
 
+  /* ── RICE BAG sizes are per bag not per kg ── */
+  .per-bag { font-size: 11px; color: #666; font-weight: 400; margin-left: 2px; }
+
+  /* ── TOAST ── */
   .toast {
     position: fixed; top: 20px; left: 50%;
     transform: translateX(-50%) translateY(-80px);
-    background: #1e0000; border: 1px solid var(--red-warn);
-    color: var(--red-warn); font-family: 'Montserrat', sans-serif;
-    font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
-    padding: 12px 22px; border-radius: 10px;
+    background: #1e0000; border: 1px solid var(--red-warn); color: var(--red-warn);
+    font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.5px; padding: 12px 22px; border-radius: 10px;
     box-shadow: 0 6px 24px rgba(255,77,77,0.25); z-index: 9999;
     transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
     white-space: nowrap; opacity: 0; pointer-events: none;
@@ -242,6 +285,7 @@
     box-shadow: 0 6px 24px rgba(212,175,55,0.2);
   }
 
+  /* ── SUMMARY ── */
   .summary-card {
     background: var(--black-card); border: 1px solid var(--black-border);
     border-radius: 14px; padding: 18px; position: relative; overflow: hidden;
@@ -269,7 +313,13 @@
     font-family: 'Playfair Display', serif; font-size: 16px;
     font-weight: 700; color: var(--gold-light); margin-top: 1px; line-height: 1.2;
   }
-
+  .summary-section-label {
+    font-size: 8px; letter-spacing: 2px; color: var(--gold-dark);
+    text-transform: uppercase; font-weight: 700;
+    margin: 10px 0 4px; padding-top: 8px;
+    border-top: 1px solid #222;
+  }
+  .summary-section-label:first-of-type { border-top: none; margin-top: 4px; }
   .summary-row {
     display: flex; justify-content: space-between; align-items: center;
     padding: 8px 0; border-bottom: 1px solid #1e1e1e; font-size: 13px;
@@ -278,7 +328,6 @@
   .s-name  { color: var(--white); font-weight: 500; }
   .s-qty   { color: #bbbbbb; font-size: 11px; font-weight: 600; }
   .s-price { color: var(--gold); font-weight: 700; font-size: 13px; }
-
   .summary-total {
     display: flex; justify-content: space-between; align-items: center;
     padding-top: 14px; margin-top: 10px; border-top: 1px solid var(--gold-dark);
@@ -297,13 +346,14 @@
     font-size: 12px; letter-spacing: 1px; font-style: italic;
   }
 
+  /* ── WHATSAPP BUTTON ── */
   .btn-whatsapp {
     width: 100%; padding: 16px; margin-top: 16px;
     background: linear-gradient(135deg, #0d6e2f, #25D366);
     color: white; border: none; border-radius: 12px;
-    font-family: 'Montserrat', sans-serif; font-size: 13px;
-    font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
     box-shadow: 0 4px 20px rgba(37,211,102,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
     transition: all 0.25s; position: relative; overflow: hidden;
   }
@@ -334,6 +384,7 @@
 
 <div class="container">
 
+  <!-- Your Details -->
   <div class="section-title">&#10022; Your Details</div>
   <div class="customer-card">
     <div class="input-group" style="margin-bottom:10px;">
@@ -346,232 +397,348 @@
     </div>
   </div>
 
+  <!-- Select Items -->
   <div class="section-title">&#10022; Select Items</div>
 
-  <!-- ITEM 1: Minapappu -->
-  <div class="item" id="item-1" onclick="selectItem(event,'item-1')">
-    <div class="check-badge">&#10003;</div>
-    <img src="mina.webp" loading="lazy" alt="Minapappu">
-    <div class="details">
-      <div class="item-name">Minapappu <span class="badge">Best</span></div>
-      <div class="item-sub">Urad Dal</div>
-      <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">115</span><span class="per-kg"> / kg</span></div>
-    </div>
-    <div class="qty-wrapper">
-      <span class="qty-label">Quantity</span>
-      <select class="qty-select" onchange="onQtyChange(event,'item-1')">
-        <option value="0">-- kg</option>
-        <option value="0.5">1/2 kg</option>
-        <option value="1">1 kg</option>
-        <option value="1.5">1.5 kg</option>
-        <option value="2">2 kg</option>
-        <option value="2.5">2.5 kg</option>
-        <option value="3">3 kg</option>
-        <option value="3.5">3.5 kg</option>
-        <option value="4">4 kg</option>
-        <option value="4.5">4.5 kg</option>
-        <option value="5">5 kg</option>
-        <option value="6">6 kg</option>
-        <option value="7">7 kg</option>
-        <option value="8">8 kg</option>
-        <option value="9">9 kg</option>
-        <option value="10">10 kg</option>
-      </select>
-    </div>
+  <!-- TAB BUTTONS -->
+  <div class="tabs-wrapper">
+    <button class="tab-btn active" id="tab-rice" onclick="switchTab('rice')">
+      <span class="tab-icon">&#127807;</span>
+      Nellore Rice Club
+    </button>
+    <button class="tab-btn" id="tab-grocery" onclick="switchTab('grocery')">
+      <span class="tab-icon">&#128722;</span>
+      Grocery
+    </button>
   </div>
 
-  <!-- ITEM 2: Kandipappu -->
-  <div class="item" id="item-2" onclick="selectItem(event,'item-2')">
-    <div class="check-badge">&#10003;</div>
-    <img src="kandi.webp" loading="lazy" alt="Kandipappu">
-    <div class="details">
-      <div class="item-name">Kandipappu</div>
-      <div class="item-sub">Toor Dal</div>
-      <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">135</span><span class="per-kg"> / kg</span></div>
-    </div>
-    <div class="qty-wrapper">
-      <span class="qty-label">Quantity</span>
-      <select class="qty-select" onchange="onQtyChange(event,'item-2')">
-        <option value="0">-- kg</option>
-        <option value="0.5">1/2 kg</option>
-        <option value="1">1 kg</option>
-        <option value="1.5">1.5 kg</option>
-        <option value="2">2 kg</option>
-        <option value="2.5">2.5 kg</option>
-        <option value="3">3 kg</option>
-        <option value="3.5">3.5 kg</option>
-        <option value="4">4 kg</option>
-        <option value="4.5">4.5 kg</option>
-        <option value="5">5 kg</option>
-        <option value="6">6 kg</option>
-        <option value="7">7 kg</option>
-        <option value="8">8 kg</option>
-        <option value="9">9 kg</option>
-        <option value="10">10 kg</option>
-      </select>
-    </div>
-  </div>
+  <!-- ══════════════════════════════════════ -->
+  <!-- RICE TAB                              -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="tab-panel active" id="panel-rice">
 
-  <!-- ITEM 3: Veru Senagapappu -->
-  <div class="item" id="item-3" onclick="selectItem(event,'item-3')">
-    <div class="check-badge">&#10003;</div>
-    <img src="veru.webp" loading="lazy" alt="Veru Senagapappu">
-    <div class="details">
-      <div class="item-name">Veru Senagapappu</div>
-      <div class="item-sub">Whole Chickpeas</div>
-      <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">160</span><span class="per-kg"> / kg</span></div>
+    <!-- RICE 1 -->
+    <div class="item" id="rice-1" onclick="selectItem(event,'rice-1')">
+      <div class="check-badge">&#10003;</div>
+      <img src="rice1.webp" loading="lazy" alt="Sona Masoori Rice">
+      <div class="details">
+        <div class="item-name">Sona Masoori <span class="badge">Popular</span></div>
+        <div class="item-sub">Premium Raw Rice</div>
+        <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">1350</span><span class="per-bag"> / 26 kg bag</span></div>
+      </div>
+      <div class="qty-wrapper">
+        <span class="qty-label">Quantity</span>
+        <select class="qty-select" onchange="onQtyChange(event,'rice-1')">
+          <option value="0">-- bags</option>
+          <option value="1">1 bag</option>
+          <option value="2">2 bags</option>
+          <option value="3">3 bags</option>
+          <option value="4">4 bags</option>
+          <option value="5">5 bags</option>
+        </select>
+      </div>
     </div>
-    <div class="qty-wrapper">
-      <span class="qty-label">Quantity</span>
-      <select class="qty-select" onchange="onQtyChange(event,'item-3')">
-        <option value="0">-- kg</option>
-        <option value="0.5">1/2 kg</option>
-        <option value="1">1 kg</option>
-        <option value="1.5">1.5 kg</option>
-        <option value="2">2 kg</option>
-        <option value="2.5">2.5 kg</option>
-        <option value="3">3 kg</option>
-        <option value="3.5">3.5 kg</option>
-        <option value="4">4 kg</option>
-        <option value="4.5">4.5 kg</option>
-        <option value="5">5 kg</option>
-        <option value="6">6 kg</option>
-        <option value="7">7 kg</option>
-        <option value="8">8 kg</option>
-        <option value="9">9 kg</option>
-        <option value="10">10 kg</option>
-      </select>
-    </div>
-  </div>
 
-  <!-- ITEM 4: Pesalapappu -->
-  <div class="item" id="item-4" onclick="selectItem(event,'item-4')">
-    <div class="check-badge">&#10003;</div>
-    <img src="pesa.webp" loading="lazy" alt="Pesalapappu">
-    <div class="details">
-      <div class="item-name">Pesalapappu</div>
-      <div class="item-sub">Moong Dal</div>
-      <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">110</span><span class="per-kg"> / kg</span></div>
+    <!-- RICE 2 -->
+    <div class="item" id="rice-2" onclick="selectItem(event,'rice-2')">
+      <div class="check-badge">&#10003;</div>
+      <img src="rice2.webp" loading="lazy" alt="BPT Rice">
+      <div class="details">
+        <div class="item-name">BPT Rice</div>
+        <div class="item-sub">Bapatla Samba Rice</div>
+        <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">1200</span><span class="per-bag"> / 26 kg bag</span></div>
+      </div>
+      <div class="qty-wrapper">
+        <span class="qty-label">Quantity</span>
+        <select class="qty-select" onchange="onQtyChange(event,'rice-2')">
+          <option value="0">-- bags</option>
+          <option value="1">1 bag</option>
+          <option value="2">2 bags</option>
+          <option value="3">3 bags</option>
+          <option value="4">4 bags</option>
+          <option value="5">5 bags</option>
+        </select>
+      </div>
     </div>
-    <div class="qty-wrapper">
-      <span class="qty-label">Quantity</span>
-      <select class="qty-select" onchange="onQtyChange(event,'item-4')">
-        <option value="0">-- kg</option>
-        <option value="0.5">1/2 kg</option>
-        <option value="1">1 kg</option>
-        <option value="1.5">1.5 kg</option>
-        <option value="2">2 kg</option>
-        <option value="2.5">2.5 kg</option>
-        <option value="3">3 kg</option>
-        <option value="3.5">3.5 kg</option>
-        <option value="4">4 kg</option>
-        <option value="4.5">4.5 kg</option>
-        <option value="5">5 kg</option>
-        <option value="6">6 kg</option>
-        <option value="7">7 kg</option>
-        <option value="8">8 kg</option>
-        <option value="9">9 kg</option>
-        <option value="10">10 kg</option>
-      </select>
-    </div>
-  </div>
 
-  <!-- ITEM 5: Pachi Senagapappu -->
-  <div class="item" id="item-5" onclick="selectItem(event,'item-5')">
-    <div class="check-badge">&#10003;</div>
-    <img src="pachi.webp" loading="lazy" alt="Pachi Senagapappu">
-    <div class="details">
-      <div class="item-name">Pachi Senagapappu</div>
-      <div class="item-sub">Raw Chickpeas</div>
-      <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">85</span><span class="per-kg"> / kg</span></div>
+    <!-- RICE 3 -->
+    <div class="item" id="rice-3" onclick="selectItem(event,'rice-3')">
+      <div class="check-badge">&#10003;</div>
+      <img src="rice3.webp" loading="lazy" alt="HMT Rice">
+      <div class="details">
+        <div class="item-name">HMT Rice</div>
+        <div class="item-sub">Medium Grain Rice</div>
+        <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">1450</span><span class="per-bag"> / 26 kg bag</span></div>
+      </div>
+      <div class="qty-wrapper">
+        <span class="qty-label">Quantity</span>
+        <select class="qty-select" onchange="onQtyChange(event,'rice-3')">
+          <option value="0">-- bags</option>
+          <option value="1">1 bag</option>
+          <option value="2">2 bags</option>
+          <option value="3">3 bags</option>
+          <option value="4">4 bags</option>
+          <option value="5">5 bags</option>
+        </select>
+      </div>
     </div>
-    <div class="qty-wrapper">
-      <span class="qty-label">Quantity</span>
-      <select class="qty-select" onchange="onQtyChange(event,'item-5')">
-        <option value="0">-- kg</option>
-        <option value="0.5">1/2 kg</option>
-        <option value="1">1 kg</option>
-        <option value="1.5">1.5 kg</option>
-        <option value="2">2 kg</option>
-        <option value="2.5">2.5 kg</option>
-        <option value="3">3 kg</option>
-        <option value="3.5">3.5 kg</option>
-        <option value="4">4 kg</option>
-        <option value="4.5">4.5 kg</option>
-        <option value="5">5 kg</option>
-        <option value="6">6 kg</option>
-        <option value="7">7 kg</option>
-        <option value="8">8 kg</option>
-        <option value="9">9 kg</option>
-        <option value="10">10 kg</option>
-      </select>
-    </div>
-  </div>
 
-  <!-- ITEM 6: Saipappu -->
-  <div class="item" id="item-6" onclick="selectItem(event,'item-6')">
-    <div class="check-badge">&#10003;</div>
-    <img src="sai.webp" loading="lazy" alt="Saipappu">
-    <div class="details">
-      <div class="item-name">Saipappu</div>
-      <div class="item-sub">Lentils</div>
-      <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">90</span><span class="per-kg"> / kg</span></div>
+    <!-- RICE 4 -->
+    <div class="item" id="rice-4" onclick="selectItem(event,'rice-4')">
+      <div class="check-badge">&#10003;</div>
+      <img src="rice4.webp" loading="lazy" alt="Nellore Jeela Karra Rice">
+      <div class="details">
+        <div class="item-name">Jeela Karra Samba</div>
+        <div class="item-sub">Nellore Special Rice</div>
+        <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">1600</span><span class="per-bag"> / 26 kg bag</span></div>
+      </div>
+      <div class="qty-wrapper">
+        <span class="qty-label">Quantity</span>
+        <select class="qty-select" onchange="onQtyChange(event,'rice-4')">
+          <option value="0">-- bags</option>
+          <option value="1">1 bag</option>
+          <option value="2">2 bags</option>
+          <option value="3">3 bags</option>
+          <option value="4">4 bags</option>
+          <option value="5">5 bags</option>
+        </select>
+      </div>
     </div>
-    <div class="qty-wrapper">
-      <span class="qty-label">Quantity</span>
-      <select class="qty-select" onchange="onQtyChange(event,'item-6')">
-        <option value="0">-- kg</option>
-        <option value="0.5">1/2 kg</option>
-        <option value="1">1 kg</option>
-        <option value="1.5">1.5 kg</option>
-        <option value="2">2 kg</option>
-        <option value="2.5">2.5 kg</option>
-        <option value="3">3 kg</option>
-        <option value="3.5">3.5 kg</option>
-        <option value="4">4 kg</option>
-        <option value="4.5">4.5 kg</option>
-        <option value="5">5 kg</option>
-        <option value="6">6 kg</option>
-        <option value="7">7 kg</option>
-        <option value="8">8 kg</option>
-        <option value="9">9 kg</option>
-        <option value="10">10 kg</option>
-      </select>
-    </div>
-  </div>
 
-  <!-- ITEM 7: Chintapandu -->
-  <div class="item" id="item-7" onclick="selectItem(event,'item-7')">
-    <div class="check-badge">&#10003;</div>
-    <img src="chin.webp" loading="lazy" alt="Chintapandu">
-    <div class="details">
-      <div class="item-name">Chintapandu</div>
-      <div class="item-sub">Tamarind</div>
-      <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">170</span><span class="per-kg"> / kg</span></div>
-    </div>
-    <div class="qty-wrapper">
-      <span class="qty-label">Quantity</span>
-      <select class="qty-select" onchange="onQtyChange(event,'item-7')">
-        <option value="0">-- kg</option>
-        <option value="0.5">1/2 kg</option>
-        <option value="1">1 kg</option>
-        <option value="1.5">1.5 kg</option>
-        <option value="2">2 kg</option>
-        <option value="2.5">2.5 kg</option>
-        <option value="3">3 kg</option>
-        <option value="3.5">3.5 kg</option>
-        <option value="4">4 kg</option>
-        <option value="4.5">4.5 kg</option>
-        <option value="5">5 kg</option>
-        <option value="6">6 kg</option>
-        <option value="7">7 kg</option>
-        <option value="8">8 kg</option>
-        <option value="9">9 kg</option>
-        <option value="10">10 kg</option>
-      </select>
-    </div>
-  </div>
+  </div><!-- end panel-rice -->
 
+  <!-- ══════════════════════════════════════ -->
+  <!-- GROCERY TAB                           -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="tab-panel" id="panel-grocery">
+
+    <!-- ITEM 1: Minapappu -->
+    <div class="item" id="item-1" onclick="selectItem(event,'item-1')">
+      <div class="check-badge">&#10003;</div>
+      <img src="mina.webp" loading="lazy" alt="Minapappu">
+      <div class="details">
+        <div class="item-name">Minapappu <span class="badge">Best</span></div>
+        <div class="item-sub">Urad Dal</div>
+        <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">115</span><span class="per-kg"> / kg</span></div>
+      </div>
+      <div class="qty-wrapper">
+        <span class="qty-label">Quantity</span>
+        <select class="qty-select" onchange="onQtyChange(event,'item-1')">
+          <option value="0">-- kg</option>
+          <option value="0.5">1/2 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ITEM 2: Kandipappu -->
+    <div class="item" id="item-2" onclick="selectItem(event,'item-2')">
+      <div class="check-badge">&#10003;</div>
+      <img src="kandi.webp" loading="lazy" alt="Kandipappu">
+      <div class="details">
+        <div class="item-name">Kandipappu</div>
+        <div class="item-sub">Toor Dal</div>
+        <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">135</span><span class="per-kg"> / kg</span></div>
+      </div>
+      <div class="qty-wrapper">
+        <span class="qty-label">Quantity</span>
+        <select class="qty-select" onchange="onQtyChange(event,'item-2')">
+          <option value="0">-- kg</option>
+          <option value="0.5">1/2 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ITEM 3: Veru Senagapappu -->
+    <div class="item" id="item-3" onclick="selectItem(event,'item-3')">
+      <div class="check-badge">&#10003;</div>
+      <img src="veru.webp" loading="lazy" alt="Veru Senagapappu">
+      <div class="details">
+        <div class="item-name">Veru Senagapappu</div>
+        <div class="item-sub">Whole Chickpeas</div>
+        <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">160</span><span class="per-kg"> / kg</span></div>
+      </div>
+      <div class="qty-wrapper">
+        <span class="qty-label">Quantity</span>
+        <select class="qty-select" onchange="onQtyChange(event,'item-3')">
+          <option value="0">-- kg</option>
+          <option value="0.5">1/2 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ITEM 4: Pesalapappu -->
+    <div class="item" id="item-4" onclick="selectItem(event,'item-4')">
+      <div class="check-badge">&#10003;</div>
+      <img src="pesa.webp" loading="lazy" alt="Pesalapappu">
+      <div class="details">
+        <div class="item-name">Pesalapappu</div>
+        <div class="item-sub">Moong Dal</div>
+        <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">110</span><span class="per-kg"> / kg</span></div>
+      </div>
+      <div class="qty-wrapper">
+        <span class="qty-label">Quantity</span>
+        <select class="qty-select" onchange="onQtyChange(event,'item-4')">
+          <option value="0">-- kg</option>
+          <option value="0.5">1/2 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ITEM 5: Pachi Senagapappu -->
+    <div class="item" id="item-5" onclick="selectItem(event,'item-5')">
+      <div class="check-badge">&#10003;</div>
+      <img src="pachi.webp" loading="lazy" alt="Pachi Senagapappu">
+      <div class="details">
+        <div class="item-name">Pachi Senagapappu</div>
+        <div class="item-sub">Raw Chickpeas</div>
+        <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">85</span><span class="per-kg"> / kg</span></div>
+      </div>
+      <div class="qty-wrapper">
+        <span class="qty-label">Quantity</span>
+        <select class="qty-select" onchange="onQtyChange(event,'item-5')">
+          <option value="0">-- kg</option>
+          <option value="0.5">1/2 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ITEM 6: Saipappu -->
+    <div class="item" id="item-6" onclick="selectItem(event,'item-6')">
+      <div class="check-badge">&#10003;</div>
+      <img src="sai.webp" loading="lazy" alt="Saipappu">
+      <div class="details">
+        <div class="item-name">Saipappu</div>
+        <div class="item-sub">Lentils</div>
+        <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">90</span><span class="per-kg"> / kg</span></div>
+      </div>
+      <div class="qty-wrapper">
+        <span class="qty-label">Quantity</span>
+        <select class="qty-select" onchange="onQtyChange(event,'item-6')">
+          <option value="0">-- kg</option>
+          <option value="0.5">1/2 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- ITEM 7: Chintapandu -->
+    <div class="item" id="item-7" onclick="selectItem(event,'item-7')">
+      <div class="check-badge">&#10003;</div>
+      <img src="chin.webp" loading="lazy" alt="Chintapandu">
+      <div class="details">
+        <div class="item-name">Chintapandu</div>
+        <div class="item-sub">Tamarind</div>
+        <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">170</span><span class="per-kg"> / kg</span></div>
+      </div>
+      <div class="qty-wrapper">
+        <span class="qty-label">Quantity</span>
+        <select class="qty-select" onchange="onQtyChange(event,'item-7')">
+          <option value="0">-- kg</option>
+          <option value="0.5">1/2 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
+        </select>
+      </div>
+    </div>
+
+  </div><!-- end panel-grocery -->
+
+  <!-- Order Summary -->
   <div class="section-title">&#10022; Order Summary</div>
   <div class="summary-card">
     <div class="summary-empty" id="summaryEmpty">No items selected yet</div>
@@ -587,37 +754,60 @@
 </div>
 
 <script>
-  var PRICES = {
+  /* ── DATA ── */
+  var RICE_PRICES = {
+    'rice-1': 1350, 'rice-2': 1200, 'rice-3': 1450, 'rice-4': 1600
+  };
+  var RICE_NAMES = {
+    'rice-1': 'Sona Masoori (26kg bag)',
+    'rice-2': 'BPT Rice (26kg bag)',
+    'rice-3': 'HMT Rice (26kg bag)',
+    'rice-4': 'Jeela Karra Samba (26kg bag)'
+  };
+  var RICE_IDS = ['rice-1','rice-2','rice-3','rice-4'];
+
+  var GROCERY_PRICES = {
     'item-1': 115, 'item-2': 135, 'item-3': 160,
     'item-4': 110, 'item-5': 85,  'item-6': 90, 'item-7': 170
   };
-  var NAMES = {
-    'item-1': 'Minapappu',
-    'item-2': 'Kandipappu',
-    'item-3': 'Veru Senagapappu',
-    'item-4': 'Pesalapappu',
-    'item-5': 'Pachi Senagapappu',
-    'item-6': 'Saipappu',
+  var GROCERY_NAMES = {
+    'item-1': 'Minapappu',       'item-2': 'Kandipappu',
+    'item-3': 'Veru Senagapappu','item-4': 'Pesalapappu',
+    'item-5': 'Pachi Senagapappu','item-6': 'Saipappu',
     'item-7': 'Chintapandu'
   };
-  var ALL_IDS = ['item-1','item-2','item-3','item-4','item-5','item-6','item-7'];
+  var GROCERY_IDS = ['item-1','item-2','item-3','item-4','item-5','item-6','item-7'];
+
+  var ALL_IDS = RICE_IDS.concat(GROCERY_IDS);
   var toastTimer = null;
 
-  /* Click anywhere on item box to select it */
+  /* ── TAB SWITCH ── */
+  function switchTab(tab) {
+    document.getElementById('tab-rice').classList.toggle('active', tab === 'rice');
+    document.getElementById('tab-grocery').classList.toggle('active', tab === 'grocery');
+    document.getElementById('panel-rice').classList.toggle('active', tab === 'rice');
+    document.getElementById('panel-grocery').classList.toggle('active', tab === 'grocery');
+  }
+
+  /* ── DIGITS ONLY FOR PHONE ── */
+  function filterPhone(input) {
+    input.value = input.value.replace(/[^0-9]/g, '');
+  }
+
+  /* ── SELECT ITEM (click anywhere on card) ── */
   function selectItem(e, id) {
     if (e.target.tagName === 'SELECT' || e.target.tagName === 'OPTION') return;
-
     var item = document.getElementById(id);
     var sel  = item.querySelector('select');
 
     if (item.classList.contains('active')) {
-      item.classList.remove('active', 'selected', 'error');
+      item.classList.remove('active','selected','error');
       sel.value = '0';
       updateSummary();
       return;
     }
     if (item.classList.contains('selected')) {
-      item.classList.remove('selected', 'error');
+      item.classList.remove('selected','error');
       sel.value = '0';
       return;
     }
@@ -625,14 +815,14 @@
     item.classList.remove('error');
   }
 
-  /* Quantity dropdown changed */
+  /* ── QTY DROPDOWN CHANGED ── */
   function onQtyChange(e, id) {
     e.stopPropagation();
     var item = document.getElementById(id);
     var sel  = item.querySelector('select');
     if (parseFloat(sel.value) > 0) {
       item.classList.add('active');
-      item.classList.remove('selected', 'error');
+      item.classList.remove('selected','error');
     } else {
       item.classList.remove('active');
       item.classList.add('selected');
@@ -640,25 +830,63 @@
     updateSummary();
   }
 
-  /* Live update order summary */
+  /* ── CHECK IF ANY RICE BAG IS SELECTED ── */
+  function hasRiceSelected() {
+    for (var i = 0; i < RICE_IDS.length; i++) {
+      if (parseFloat(document.getElementById(RICE_IDS[i]).querySelector('select').value) > 0) return true;
+    }
+    return false;
+  }
+
+  /* ── GET TOTAL GROCERY KG ── */
+  function getTotalGroceryKg() {
+    var total = 0;
+    for (var i = 0; i < GROCERY_IDS.length; i++) {
+      total += parseFloat(document.getElementById(GROCERY_IDS[i]).querySelector('select').value) || 0;
+    }
+    return total;
+  }
+
+  /* ── LIVE SUMMARY UPDATE ── */
   function updateSummary() {
     var name      = document.getElementById('customerName').value.trim();
     var custPhone = document.getElementById('customerPhone').value.trim();
-    var html = '', total = 0, hasItems = false;
 
-    for (var i = 0; i < ALL_IDS.length; i++) {
-      var id  = ALL_IDS[i];
+    var riceHtml = '', riceTotal = 0, hasRice = false;
+    var grocHtml = '', grocTotal = 0, hasGroc = false;
+
+    /* Rice items */
+    for (var i = 0; i < RICE_IDS.length; i++) {
+      var id  = RICE_IDS[i];
       var qty = parseFloat(document.getElementById(id).querySelector('select').value);
       if (qty > 0) {
-        var it = PRICES[id] * qty;
-        total += it; hasItems = true;
-        html += '<div class="summary-row">'
-          + '<span class="s-name">' + NAMES[id] + '</span>'
-          + '<span class="s-qty">' + qty + ' kg</span>'
+        var it = RICE_PRICES[id] * qty;
+        riceTotal += it; hasRice = true;
+        riceHtml += '<div class="summary-row">'
+          + '<span class="s-name">' + RICE_NAMES[id] + '</span>'
+          + '<span class="s-qty">x' + qty + '</span>'
           + '<span class="s-price">&#8377; ' + it.toFixed(0) + '</span>'
           + '</div>';
       }
     }
+
+    /* Grocery items */
+    for (var j = 0; j < GROCERY_IDS.length; j++) {
+      var gid  = GROCERY_IDS[j];
+      var gqty = parseFloat(document.getElementById(gid).querySelector('select').value);
+      if (gqty > 0) {
+        var git = GROCERY_PRICES[gid] * gqty;
+        grocTotal += git; hasGroc = true;
+        grocHtml += '<div class="summary-row">'
+          + '<span class="s-name">' + GROCERY_NAMES[gid] + '</span>'
+          + '<span class="s-qty">' + gqty + ' kg</span>'
+          + '<span class="s-price">&#8377; ' + git.toFixed(0) + '</span>'
+          + '</div>';
+      }
+    }
+
+    var hasItems   = hasRice || hasGroc;
+    var grandTotal = riceTotal + grocTotal;
 
     var emptyEl    = document.getElementById('summaryEmpty');
     var customerEl = document.getElementById('summaryCustomer');
@@ -672,6 +900,7 @@
     }
     emptyEl.style.display = 'none';
 
+    /* Customer name block */
     if (name) {
       var phoneHtml = custPhone
         ? '<span style="font-size:11px;color:#b0b0b0;margin-top:3px;display:block;font-family:Montserrat,sans-serif;font-weight:500;">&#128222; ' + custPhone + '</span>'
@@ -682,42 +911,52 @@
         + '<div class="cust-info">'
         + '<span class="cust-label">Order for</span>'
         + '<span class="cust-name">' + name + '</span>'
-        + phoneHtml
-        + '</div></div>';
+        + phoneHtml + '</div></div>';
     } else {
       customerEl.innerHTML = '';
     }
 
-    /* Min order progress */
-    var totalKg = 0;
-    for (var m = 0; m < ALL_IDS.length; m++) {
-      totalKg += parseFloat(document.getElementById(ALL_IDS[m]).querySelector('select').value) || 0;
+    /* Build rows HTML with section labels */
+    var html = '';
+    if (hasRice) {
+      html += '<div class="summary-section-label">&#127807; Nellore Rice Club</div>';
+      html += riceHtml;
     }
-    var progressPct = Math.min((totalKg / 8) * 100, 100);
-    var kgLeft = totalKg >= 8 ? 0 : (8 - totalKg);
-    var progressColor = totalKg >= 8 ? '#d4af37' : '#555';
-    var progressMsg = totalKg >= 8
-      ? '&#10003; Minimum order reached (' + totalKg + ' kg)'
-      : totalKg + ' kg of 8 kg minimum &mdash; add ' + kgLeft.toFixed(1).replace('.0','') + ' kg more';
+    if (hasGroc) {
+      html += '<div class="summary-section-label">&#128722; Grocery</div>';
+      html += grocHtml;
+    }
 
+    /* Grand total */
     html += '<div class="summary-total">'
       + '<span class="t-label">Grand Total</span>'
-      + '<span class="t-amount">&#8377; ' + total.toFixed(0) + '</span>'
+      + '<span class="t-amount">&#8377; ' + grandTotal.toFixed(0) + '</span>'
       + '</div>';
 
-    html += '<div style="margin-top:14px;">'
-      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">'
-      + '<span style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:' + progressColor + ';font-weight:700;">' + progressMsg + '</span>'
-      + '</div>'
-      + '<div style="height:4px;background:#1e1e1e;border-radius:4px;overflow:hidden;">'
-      + '<div style="height:100%;width:' + progressPct + '%;background:linear-gradient(90deg,#a67c00,' + (totalKg >= 8 ? '#f7d774' : '#d4af37') + ');border-radius:4px;transition:width 0.4s ease;"></div>'
-      + '</div>'
-      + '</div>';
+    /* Progress bar — only shown when NO rice selected */
+    if (!hasRice && hasGroc) {
+      var grocKg      = getTotalGroceryKg();
+      var pct         = Math.min((grocKg / 8) * 100, 100);
+      var barColor    = grocKg >= 8 ? '#d4af37' : '#555';
+      var barFill     = grocKg >= 8 ? '#f7d774' : '#d4af37';
+      var progressMsg = grocKg >= 8
+        ? '&#10003; Minimum order reached (' + grocKg + ' kg)'
+        : grocKg + ' kg of 8 kg minimum &mdash; add ' + (8 - grocKg).toFixed(1).replace('.0','') + ' kg more';
+      html += '<div style="margin-top:14px;">'
+        + '<div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:' + barColor + ';font-weight:700;margin-bottom:6px;">' + progressMsg + '</div>'
+        + '<div style="height:4px;background:#1e1e1e;border-radius:4px;overflow:hidden;">'
+        + '<div style="height:100%;width:' + pct + '%;background:linear-gradient(90deg,#a67c00,' + barFill + ');border-radius:4px;transition:width 0.4s ease;"></div>'
+        + '</div></div>';
+    } else if (hasRice) {
+      html += '<div style="margin-top:14px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);font-weight:700;">'
+        + '&#127807; Rice bag selected &mdash; no minimum for grocery items'
+        + '</div>';
+    }
 
     rowsEl.innerHTML = html;
   }
 
-  /* Toast message */
+  /* ── TOAST ── */
   function showToast(msg, type) {
     var t = document.getElementById('toast');
     t.textContent = msg;
@@ -727,106 +966,115 @@
     toastTimer = setTimeout(function() { t.classList.remove('show'); }, 3500);
   }
 
-  /* Build WhatsApp message and open */
+  /* ── BUILD & SEND WHATSAPP ── */
   function buildAndSend(locationText) {
     var name      = document.getElementById('customerName').value.trim();
     var custPhone = document.getElementById('customerPhone').value.trim();
-    var lines = '', total = 0, count = 1;
+    var lines = '', grandTotal = 0, count = 1;
 
-    for (var i = 0; i < ALL_IDS.length; i++) {
-      var id  = ALL_IDS[i];
-      var qty = parseFloat(document.getElementById(id).querySelector('select').value);
+    /* Rice lines */
+    var hasRiceItems = false;
+    for (var i = 0; i < RICE_IDS.length; i++) {
+      var qty = parseFloat(document.getElementById(RICE_IDS[i]).querySelector('select').value);
       if (qty > 0) {
-        var it = PRICES[id] * qty;
-        lines += count + '. ' + NAMES[id] + ' - ' + qty + 'kg - Rs.' + it.toFixed(0) + '%0A';
-        total += it; count++;
+        var it = RICE_PRICES[RICE_IDS[i]] * qty;
+        if (!hasRiceItems) { lines += '--- Nellore Rice Club ---%0A'; hasRiceItems = true; }
+        lines += count + '. ' + RICE_NAMES[RICE_IDS[i]] + ' x' + qty + ' - Rs.' + it.toFixed(0) + '%0A';
+        grandTotal += it; count++;
+      }
+    }
+
+    /* Grocery lines */
+    var hasGrocItems = false;
+    for (var j = 0; j < GROCERY_IDS.length; j++) {
+      var gqty = parseFloat(document.getElementById(GROCERY_IDS[j]).querySelector('select').value);
+      if (gqty > 0) {
+        var git = GROCERY_PRICES[GROCERY_IDS[j]] * gqty;
+        if (!hasGrocItems) { lines += '--- Grocery ---%0A'; hasGrocItems = true; }
+        lines += count + '. ' + GROCERY_NAMES[GROCERY_IDS[j]] + ' - ' + gqty + 'kg - Rs.' + git.toFixed(0) + '%0A';
+        grandTotal += git; count++;
       }
     }
 
     var msg = '*Nellore Basket Order*%0A'
-      + '-----------------------------%0A'
+      + '----------------------------%0A'
       + 'Name%3A ' + encodeURIComponent(name) + '%0A'
-      + 'Phone%3A ' + encodeURIComponent(custPhone || 'Not provided') + '%0A'
+      + 'Phone%3A ' + encodeURIComponent(custPhone) + '%0A'
       + 'Location%3A ' + encodeURIComponent(locationText) + '%0A'
       + '----------------------------%0A'
       + lines
-      + '%0A*Total%3A Rs.' + total.toFixed(0) + '*';
+      + '%0A*Total%3A Rs.' + grandTotal.toFixed(0) + '*';
 
     window.open('https://wa.me/918008970033?text=' + msg, '_blank');
   }
 
-  /* Allow only digits in phone field */
-  function filterPhone(input) {
-    input.value = input.value.replace(/[^0-9]/g, '');
-  }
-
-  /* Place Order button */
+  /* ── PLACE ORDER BUTTON ── */
   function sendToWhatsApp() {
     var name      = document.getElementById('customerName').value.trim();
     var custPhone = document.getElementById('customerPhone').value.trim();
 
-    /* 1. Name check */
+    /* 1. Name */
     if (!name) {
       showToast('Please enter your Full Name');
-      document.getElementById('customerName').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('customerName').scrollIntoView({ behavior:'smooth', block:'center' });
       document.getElementById('customerName').focus();
       return;
     }
 
-    /* 2. Phone validation — must be exactly 10 digits starting with 6,7,8 or 9 */
+    /* 2. Phone */
     if (!custPhone) {
       showToast('Please enter your Phone Number');
-      document.getElementById('customerPhone').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('customerPhone').scrollIntoView({ behavior:'smooth', block:'center' });
       document.getElementById('customerPhone').focus();
       return;
     }
     if (custPhone.length !== 10 || !/^[6-9][0-9]{9}$/.test(custPhone)) {
       showToast('Enter a valid 10-digit Indian mobile number');
-      document.getElementById('customerPhone').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('customerPhone').scrollIntoView({ behavior:'smooth', block:'center' });
       document.getElementById('customerPhone').focus();
       return;
     }
 
-    /* 3. Check selected item without qty */
+    /* 3. Check selected-but-no-qty on any item */
     var missingId = null;
     for (var i = 0; i < ALL_IDS.length; i++) {
-      var id   = ALL_IDS[i];
-      var item = document.getElementById(id);
+      var item = document.getElementById(ALL_IDS[i]);
       var qty  = parseFloat(item.querySelector('select').value);
-      if (item.classList.contains('selected') && qty === 0) { missingId = id; break; }
+      if (item.classList.contains('selected') && qty === 0) { missingId = ALL_IDS[i]; break; }
     }
     if (missingId) {
       var mitem = document.getElementById(missingId);
       mitem.classList.add('error');
-      mitem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      showToast('Please select a Quantity for ' + NAMES[missingId]);
+      mitem.scrollIntoView({ behavior:'smooth', block:'center' });
+      /* Switch to correct tab if needed */
+      if (RICE_IDS.indexOf(missingId) !== -1) switchTab('rice');
+      else switchTab('grocery');
+      var mName = RICE_NAMES[missingId] || GROCERY_NAMES[missingId];
+      showToast('Please select a Quantity for ' + mName);
       setTimeout(function() { mitem.classList.remove('error'); }, 2500);
       return;
     }
 
-    /* 4. Check at least one item */
-    var hasItems = false;
+    /* 4. Check at least one item total */
+    var hasAny = false;
     for (var j = 0; j < ALL_IDS.length; j++) {
-      if (parseFloat(document.getElementById(ALL_IDS[j]).querySelector('select').value) > 0) {
-        hasItems = true; break;
+      if (parseFloat(document.getElementById(ALL_IDS[j]).querySelector('select').value) > 0) { hasAny = true; break; }
+    }
+    if (!hasAny) { showToast('Please select at least one item'); return; }
+
+    /* 5. Minimum 8 kg grocery — only if NO rice bag selected */
+    var riceSelected = hasRiceSelected();
+    if (!riceSelected) {
+      var grocKg = getTotalGroceryKg();
+      if (grocKg < 8) {
+        var need = (8 - grocKg).toFixed(1).replace('.0','');
+        showToast('Minimum order is 8 kg. Add ' + need + ' kg more.');
+        return;
       }
     }
-    if (!hasItems) { showToast('Please select at least one item'); return; }
 
-    /* 5. Minimum 8 kg total order check */
-    var totalKg = 0;
-    for (var k = 0; k < ALL_IDS.length; k++) {
-      totalKg += parseFloat(document.getElementById(ALL_IDS[k]).querySelector('select').value) || 0;
-    }
-    if (totalKg < 8) {
-      var remaining = (8 - totalKg).toFixed(1).replace('.0','');
-      showToast('Minimum order is 8 kg. Add ' + remaining + ' kg more to place order.');
-      return;
-    }
-
-    /* 6. Get GPS location then send */
+    /* 6. Get location and send */
     showToast('Getting your location...', 'info');
-
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         function(pos) {
@@ -835,9 +1083,7 @@
           var mapLink = 'https://maps.google.com/?q=' + lat + ',' + lng;
           buildAndSend(lat + ', ' + lng + ' | ' + mapLink);
         },
-        function(err) {
-          buildAndSend('Location not shared');
-        },
+        function() { buildAndSend('Location not shared'); },
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
       );
     } else {
