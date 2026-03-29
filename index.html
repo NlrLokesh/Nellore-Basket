@@ -147,7 +147,7 @@
     left: 14px; top: 50%;
     transform: translateY(-50%);
     font-size: 14px;
-    pointer-events: none;
+    pointer-events: auto;
   }
 
   /* ─── ITEM CARD ─── */
@@ -173,7 +173,7 @@
     background: linear-gradient(135deg, rgba(212,175,55,0.05), transparent 60%);
     opacity: 0;
     transition: opacity 0.3s;
-    pointer-events: none;
+    pointer-events: auto;
   }
   .item.selected {
     border-color: var(--gold-dark);
@@ -726,15 +726,14 @@
 </div>
 
 <script>
-  // ✅ Prices matched correctly to items 1–7
   const PRICES = {
-    'item-1': 115,  // Minapappu
-    'item-2': 135,  // Kandipappu
-    'item-3': 160,  // Veru Senagapappu
-    'item-4': 110,  // Pesalapappu
-    'item-5': 85,   // Pachi Senagapappu
-    'item-6': 90,   // Saipappu
-    'item-7': 170   // Chintapandu
+    'item-1': 115,
+    'item-2': 135,
+    'item-3': 160,
+    'item-4': 110,
+    'item-5': 85,
+    'item-6': 90,
+    'item-7': 170
   };
 
   const NAMES = {
@@ -750,6 +749,7 @@
   const ALL_IDS = ['item-1','item-2','item-3','item-4','item-5','item-6','item-7'];
   let toastTimer = null;
 
+  // ✅ Updated: No "selected" logic needed
   function selectItem(e, id) {
     if (e.target.closest('select')) return;
 
@@ -757,21 +757,13 @@
     const sel  = item.querySelector('select');
 
     if (item.classList.contains('active')) {
-      item.classList.remove('active', 'selected', 'error');
+      item.classList.remove('active', 'error');
       sel.value = '0';
       updateSummary();
-      return;
     }
-    if (item.classList.contains('selected')) {
-      item.classList.remove('selected', 'error');
-      sel.value = '0';
-      return;
-    }
-
-    item.classList.add('selected');
-    item.classList.remove('error');
   }
 
+  // ✅ Updated: Highlight immediately on quantity select
   function onQtyChange(e, id) {
     e.stopPropagation();
     const item = document.getElementById(id);
@@ -779,11 +771,11 @@
 
     if (parseFloat(sel.value) > 0) {
       item.classList.add('active');
-      item.classList.remove('selected', 'error');
+      item.classList.remove('error');
     } else {
       item.classList.remove('active');
-      item.classList.add('selected');
     }
+
     updateSummary();
   }
 
@@ -827,7 +819,7 @@
            <div class="cust-info">
              <span class="cust-label">Order for</span>
              <span class="cust-name">${name}</span>
-             ${custPhone ? `<span style="font-size:11px;color:#b0b0b0;margin-top:2px;font-family:'Montserrat',sans-serif;font-weight:500;">📞 ${custPhone}</span>` : ''}
+             ${custPhone ? `<span style="font-size:11px;color:#b0b0b0;margin-top:2px;">📞 ${custPhone}</span>` : ''}
            </div>
          </div>`
       : '';
@@ -858,25 +850,6 @@
       return;
     }
 
-    // Check any selected-but-no-qty item
-    let missingId = null;
-    ALL_IDS.forEach(id => {
-      if (!missingId) {
-        const item = document.getElementById(id);
-        const qty  = parseFloat(item.querySelector('select').value);
-        if (item.classList.contains('selected') && qty === 0) missingId = id;
-      }
-    });
-
-    if (missingId) {
-      const item = document.getElementById(missingId);
-      item.classList.add('error');
-      item.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      showToast('⚠ Please select a Quantity for ' + NAMES[missingId]);
-      setTimeout(() => item.classList.remove('error'), 2500);
-      return;
-    }
-
     let lines = '';
     let total = 0;
     let count = 1;
@@ -901,7 +874,6 @@
     const custPhone2 = document.getElementById('customerPhone').value.trim();
     const msg = `🛒 *Nellore Basket Order*\n👤 Name: ${name}\n📞 Phone: ${custPhone2 || 'Not provided'}\n\n${lines}\n💰 *Total: Rs.${total.toFixed(0)}*`;
 
-    // ✅ Your number
     const phone = '918008970033';
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
   }
