@@ -985,9 +985,9 @@
         buildAndSend(reason);
       },
       {
-        enableHighAccuracy: false,   /* false = faster on iPhone, uses cell/wifi */
-        timeout: 6000,               /* 6 seconds max wait */
-        maximumAge: 60000            /* accept a cached position up to 1 min old */
+        enableHighAccuracy: true,   /* false = faster on iPhone, uses cell/wifi */
+        timeout: 15000,               /* 6 seconds max wait */
+        maximumAge: 0           /* accept a cached position up to 1 min old */
       }
     );
   }
