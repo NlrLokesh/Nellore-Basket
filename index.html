@@ -1069,66 +1069,163 @@
    * 3 s of the first fix and upgrade if accuracy improves to ≤10 m.
    */
   function sendToWhatsApp() {
-    var name      = document.getElementById('customerName').value.trim();
-    var custPhone = document.getElementById('customerPhone').value.trim();
 
-    /* 1. Name */
-    if (!name) {
-      showToast('Please enter your Full Name');
-      document.getElementById('customerName').scrollIntoView({ behavior:'smooth', block:'center' });
-      document.getElementById('customerName').focus();
+  var name      = document.getElementById('customerName').value.trim();
+  var custPhone = document.getElementById('customerPhone').value.trim();
+
+  /* 1. NAME */
+  if (!name) {
+    showToast('Please enter your Full Name');
+    document.getElementById('customerName').focus();
+    return;
+  }
+
+  /* 2. PHONE */
+  if (!custPhone) {
+    showToast('Please enter your Phone Number');
+    document.getElementById('customerPhone').focus();
+    return;
+  }
+
+  if (custPhone.length !== 10 || !/^[6-9][0-9]{9}$/.test(custPhone)) {
+    showToast('Enter a valid 10-digit Indian mobile number');
+    document.getElementById('customerPhone').focus();
+    return;
+  }
+
+  /* 3. CHECK SELECTED BUT NO QTY */
+  var missingId = null;
+
+  for (var i = 0; i < ALL_IDS.length; i++) {
+    var item = document.getElementById(ALL_IDS[i]);
+    var qty  = parseFloat(item.querySelector('select').value);
+
+    if (item.classList.contains('selected') && qty === 0) {
+      missingId = ALL_IDS[i];
+      break;
+    }
+  }
+
+  if (missingId) {
+    var mitem = document.getElementById(missingId);
+    mitem.classList.add('error');
+
+    mitem.scrollIntoView({ behavior:'smooth', block:'center' });
+
+    if (RICE_IDS.indexOf(missingId) !== -1) switchTab('rice');
+    else switchTab('grocery');
+
+    var mName = RICE_NAMES[missingId] || GROCERY_NAMES[missingId];
+
+    showToast('Please select a Quantity for ' + mName);
+
+    setTimeout(function() {
+      mitem.classList.remove('error');
+    }, 2500);
+
+    return;
+  }
+
+  /* 4. AT LEAST ONE ITEM */
+  var hasAny = false;
+
+  for (var j = 0; j < ALL_IDS.length; j++) {
+    if (parseFloat(document.getElementById(ALL_IDS[j]).querySelector('select').value) > 0) {
+      hasAny = true;
+      break;
+    }
+  }
+
+  if (!hasAny) {
+    showToast('Please select at least one item');
+    return;
+  }
+
+  /* 5. MINIMUM 8KG (NO RICE) */
+  if (!hasRiceSelected()) {
+    var grocKg = getTotalGroceryKg();
+
+    if (grocKg < 8) {
+      var need = (8 - grocKg).toFixed(1).replace('.0','');
+      showToast('Minimum order is 8 kg. Add ' + need + ' kg more.');
       return;
     }
+  }
 
-    /* 2. Phone */
-    if (!custPhone) {
-      showToast('Please enter your Phone Number');
-      document.getElementById('customerPhone').scrollIntoView({ behavior:'smooth', block:'center' });
-      document.getElementById('customerPhone').focus();
-      return;
-    }
-    if (custPhone.length !== 10 || !/^[6-9][0-9]{9}$/.test(custPhone)) {
-      showToast('Enter a valid 10-digit Indian mobile number');
-      document.getElementById('customerPhone').scrollIntoView({ behavior:'smooth', block:'center' });
-      document.getElementById('customerPhone').focus();
-      return;
-    }
+  /* ── ALL VALIDATIONS PASSED ── */
 
-    /* 3. Check selected-but-no-qty */
-    var missingId = null;
-    for (var i = 0; i < ALL_IDS.length; i++) {
-      var item = document.getElementById(ALL_IDS[i]);
-      var qty  = parseFloat(item.querySelector('select').value);
-      if (item.classList.contains('selected') && qty === 0) { missingId = ALL_IDS[i]; break; }
-    }
-    if (missingId) {
-      var mitem = document.getElementById(missingId);
-      mitem.classList.add('error');
-      mitem.scrollIntoView({ behavior:'smooth', block:'center' });
-      if (RICE_IDS.indexOf(missingId) !== -1) switchTab('rice');
-      else switchTab('grocery');
-      var mName = RICE_NAMES[missingId] || GROCERY_NAMES[missingId];
-      showToast('Please select a Quantity for ' + mName);
-      setTimeout(function() { mitem.classList.remove('error'); }, 2500);
-      return;
-    }
+  var btn = document.getElementById('waBtn');
+  btn.disabled = true;
 
-    /* 4. At least one item */
-    var hasAny = false;
-    for (var j = 0; j < ALL_IDS.length; j++) {
-      if (parseFloat(document.getElementById(ALL_IDS[j]).querySelector('select').value) > 0) { hasAny = true; break; }
-    }
-    if (!hasAny) { showToast('Please select at least one item'); return; }
+  /* ✅ OPEN TAB INSTANTLY (FIXES POPUP BLOCK) */
+  var waWindow = window.open('', '_blank');
 
-    /* 5. Minimum 8 kg grocery (only if no rice bag) */
-    if (!hasRiceSelected()) {
-      var grocKg = getTotalGroceryKg();
-      if (grocKg < 8) {
-        var need = (8 - grocKg).toFixed(1).replace('.0','');
-        showToast('Minimum order is 8 kg. Add ' + need + ' kg more.');
-        return;
+  if (!waWindow) {
+    showToast("Popup blocked. Please allow popups.");
+    btn.disabled = false;
+    return;
+  }
+
+  /* ✅ LOADING SCREEN */
+  waWindow.document.write(`
+    <div style="font-family:sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;background:#000;color:#fff;">
+      <div style="text-align:center">
+        <h2>📍 Getting precise location...</h2>
+        <p>Please wait (3–8 seconds)</p>
+      </div>
+    </div>
+  `);
+
+  /* ✅ HIGH ACCURACY GPS */
+  if (navigator.geolocation) {
+
+    navigator.geolocation.getCurrentPosition(
+
+      function(pos) {
+
+        var lat = pos.coords.latitude.toFixed(7);
+        var lng = pos.coords.longitude.toFixed(7);
+        var acc = Math.round(pos.coords.accuracy);
+
+        var map = "https://maps.google.com/?q=" + lat + "," + lng;
+
+        var locText = lat + ", " + lng + " (±" + acc + "m) " + map;
+
+        var url = buildWhatsAppURL(locText);
+
+        waWindow.location.href = url;
+
+        btn.disabled = false;
+      },
+
+      function(error) {
+
+        var msg = "Location not shared";
+
+        if (error.code === 1) msg = "Location permission denied";
+        else if (error.code === 2) msg = "Location unavailable";
+        else if (error.code === 3) msg = "Location timeout";
+
+        var url = buildWhatsAppURL(msg);
+
+        waWindow.location.href = url;
+
+        btn.disabled = false;
+      },
+
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
       }
-    }
+    );
+
+  } else {
+    var url = buildWhatsAppURL("Location not supported");
+    waWindow.location.href = url;
+    btn.disabled = false;
+  }
+}
 
     /* ── ALL VALIDATIONS PASSED ── */
 
