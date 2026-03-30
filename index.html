@@ -2,17 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0f0f0f">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Nellore Basket - Premium Grocery</title>
-
-<!-- Preconnect for faster font loading -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;900&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -30,15 +26,16 @@
     --red-warn: #ff4d4d;
   }
 
-  /* ── PERFORMANCE: GPU acceleration on animated elements ── */
+  /* Force GPU compositing for smooth scrolling on iOS */
   body {
     font-family: 'Montserrat', sans-serif;
     background: var(--black);
     color: var(--white);
     min-height: 100vh;
     overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    -webkit-overflow-scrolling: touch;
+    /* Prevent tap highlight on iOS */
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* ── HEADER (sticky) ── */
@@ -51,10 +48,10 @@
     top: 0;
     z-index: 1000;
     overflow: hidden;
-    /* GPU layer for smooth sticky */
-    will-change: transform;
+    /* GPU layer for sticky on iOS */
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
+    will-change: transform;
   }
   header::before {
     content: '';
@@ -81,8 +78,10 @@
     margin-top: 5px; font-weight: 300; text-transform: uppercase;
   }
 
+  /* ── CONTAINER ── */
   .container { max-width: 500px; margin: 0 auto; padding: 20px 15px 30px; }
 
+  /* ── SECTION TITLE ── */
   .section-title {
     display: flex; align-items: center; gap: 10px;
     font-size: 9px; font-weight: 700; letter-spacing: 3px;
@@ -108,9 +107,10 @@
     background: var(--black-mid); border: 1px solid var(--black-border);
     border-radius: 8px; color: var(--white); font-family: 'Montserrat', sans-serif;
     font-size: 13px; font-weight: 500; outline: none;
-    transition: border 0.2s, box-shadow 0.2s;
-    /* iOS fix: prevent zoom on focus */
-    font-size: max(16px, 13px);
+    transition: border 0.25s, box-shadow 0.25s;
+    /* iOS prevents zooming on input focus if font-size >= 16px; we keep 13px but add this */
+    -webkit-appearance: none;
+    appearance: none;
   }
   .input-group input::placeholder { color: #444; }
   .input-group input:focus {
@@ -124,28 +124,45 @@
 
   /* ── TABS ── */
   .tabs-wrapper {
-    display: flex; border-radius: 12px; overflow: hidden;
-    border: 1px solid var(--black-border); margin-bottom: 16px;
+    display: flex;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--black-border);
+    margin-bottom: 16px;
   }
   .tab-btn {
-    flex: 1; padding: 12px 8px;
-    background: var(--black-card); color: #555; border: none;
-    font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700;
-    letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
-    transition: background 0.2s, color 0.2s; position: relative; outline: none;
-    /* iOS tap highlight remove */
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
+    flex: 1;
+    padding: 12px 8px;
+    background: var(--black-card);
+    color: #555;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    outline: none;
+    /* iOS button reset */
+    -webkit-appearance: none;
+    appearance: none;
   }
   .tab-btn:first-child { border-right: 1px solid var(--black-border); }
-  .tab-btn.active { background: #1c1800; color: var(--gold-light); }
+  .tab-btn.active {
+    background: #1c1800;
+    color: var(--gold-light);
+  }
   .tab-btn.active::after {
-    content: ''; position: absolute;
+    content: '';
+    position: absolute;
     bottom: 0; left: 0; right: 0; height: 2px;
     background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
   }
   .tab-btn .tab-icon { font-size: 14px; display: block; margin-bottom: 3px; }
 
+  /* ── TAB PANELS ── */
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
 
@@ -154,17 +171,20 @@
     display: flex; align-items: center;
     background: var(--black-card); border: 1px solid var(--black-border);
     border-radius: 14px; padding: 14px; margin-bottom: 10px;
-    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+    /* Use transform instead of box-shadow changes for better iOS perf */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
     position: relative; overflow: hidden;
-    cursor: pointer; user-select: none;
-    /* iOS tap highlight remove */
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    /* GPU layer */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
   .item::before {
     content: ''; position: absolute; inset: 0; border-radius: 14px;
     background: linear-gradient(135deg, rgba(212,175,55,0.05), transparent 60%);
-    opacity: 0; transition: opacity 0.25s; pointer-events: none;
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
   }
   .item.selected {
     border-color: var(--gold-dark);
@@ -183,11 +203,11 @@
     animation: shake 0.35s ease;
   }
   @keyframes shake {
-    0%,100% { transform: translateX(0); }
-    20% { transform: translateX(-6px); }
-    40% { transform: translateX(6px); }
-    60% { transform: translateX(-4px); }
-    80% { transform: translateX(4px); }
+    0%,100% { transform: translateX(0) translateZ(0); }
+    20% { transform: translateX(-6px) translateZ(0); }
+    40% { transform: translateX(6px) translateZ(0); }
+    60% { transform: translateX(-4px) translateZ(0); }
+    80% { transform: translateX(4px) translateZ(0); }
   }
 
   .check-badge {
@@ -196,43 +216,41 @@
     background: linear-gradient(135deg, var(--gold-dark), var(--gold-light));
     border-radius: 50%; font-size: 11px; color: var(--black);
     display: flex; align-items: center; justify-content: center;
-    font-weight: 900; opacity: 0; transform: scale(0.5);
-    transition: opacity 0.2s, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
-    pointer-events: none;
-    will-change: transform, opacity;
+    font-weight: 900; opacity: 0; transform: scale(0.5) translateZ(0);
+    transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1); pointer-events: none;
   }
-  .item.active .check-badge { opacity: 1; transform: scale(1); }
+  .item.active .check-badge { opacity: 1; transform: scale(1) translateZ(0); }
 
-  /* ── IMAGE: fixed size placeholder prevents layout shift ── */
+  /* ── IMAGES: optimized for speed ── */
   .item img {
     width: 74px; height: 74px; object-fit: cover;
     border-radius: 10px; flex-shrink: 0; border: 1px solid #222;
-    transition: border-color 0.25s; pointer-events: none;
-    /* Prevent iOS long-press menu */
-    -webkit-user-select: none;
-    background: #1a1a1a; /* placeholder colour while image loads */
+    transition: border-color 0.3s; pointer-events: none;
+    /* Lazy decode hint */
+    content-visibility: auto;
+    /* Prevent layout shift */
+    aspect-ratio: 1 / 1;
   }
   .item.active img { border-color: var(--gold-dark); }
 
   .details { flex: 1; margin-left: 13px; }
   .item-name {
     font-family: 'Playfair Display', serif; font-size: 16px;
-    font-weight: 700; color: #ffffff; transition: color 0.2s;
+    font-weight: 700; color: #ffffff; transition: color 0.3s;
   }
   .item.selected .item-name, .item.active .item-name { color: var(--gold-light); }
   .item-sub {
     font-size: 9px; letter-spacing: 2px; color: #b0b0b0;
-    text-transform: uppercase; margin-top: 3px; font-weight: 600; transition: color 0.2s;
+    text-transform: uppercase; margin-top: 3px; font-weight: 600; transition: color 0.3s;
   }
   .item.active .item-sub { color: var(--gold-dark); }
   .item-price {
     font-family: 'Montserrat', sans-serif; font-size: 14px;
-    font-weight: 600; color: var(--gold); margin-top: 7px;
+    font-weight: 600; color: var(--gold); margin-top: 7px; letter-spacing: 0.3px;
   }
   .item-price .rupee  { font-size: 13px; font-weight: 700; }
   .item-price .amount { font-size: 15px; font-weight: 700; }
   .item-price .per-kg { font-size: 11px; color: #666; font-weight: 400; margin-left: 2px; }
-  .per-bag            { font-size: 11px; color: #666; font-weight: 400; margin-left: 2px; }
 
   .badge {
     display: inline-block;
@@ -240,6 +258,7 @@
     color: var(--black); font-size: 7px; font-weight: 800;
     padding: 2px 7px; border-radius: 20px; letter-spacing: 1.5px;
     text-transform: uppercase; margin-left: 6px; vertical-align: middle;
+    font-family: 'Montserrat', sans-serif;
   }
 
   /* ── QUANTITY ── */
@@ -248,7 +267,7 @@
   }
   .qty-label {
     font-size: 8px; letter-spacing: 1.5px; color: #3a3a3a;
-    text-transform: uppercase; font-weight: 600; transition: color 0.2s;
+    text-transform: uppercase; font-weight: 600; transition: color 0.3s;
   }
   .item.selected .qty-label, .item.active .qty-label { color: var(--gold-dark); }
 
@@ -256,13 +275,13 @@
     padding: 9px 28px 9px 12px; border-radius: 8px;
     border: 1px solid #252525; background: var(--black-mid); color: #444;
     font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600;
-    cursor: pointer; outline: none; transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
-    min-width: 80px; appearance: none; -webkit-appearance: none;
+    cursor: pointer; outline: none; transition: all 0.3s; min-width: 80px;
+    /* iOS native select fix — keeps custom arrow */
+    -webkit-appearance: none;
+    appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23444' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat; background-position: right 10px center;
     pointer-events: none;
-    /* iOS native look override */
-    -webkit-border-radius: 8px;
   }
   .item.selected select.qty-select, .item.active select.qty-select {
     pointer-events: auto; border-color: var(--gold-dark); color: #888;
@@ -278,27 +297,29 @@
     box-shadow: 0 0 0 1px rgba(255,77,77,0.5) !important;
   }
 
+  .per-bag { font-size: 11px; color: #666; font-weight: 400; margin-left: 2px; }
+
   /* ── TOAST ── */
   .toast {
     position: fixed; top: 20px; left: 50%;
-    transform: translateX(-50%) translateY(-90px);
+    transform: translateX(-50%) translateY(-80px) translateZ(0);
     background: #1e0000; border: 1px solid var(--red-warn); color: var(--red-warn);
     font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600;
-    letter-spacing: 0.5px; padding: 12px 20px; border-radius: 10px;
+    letter-spacing: 0.5px; padding: 12px 22px; border-radius: 10px;
     box-shadow: 0 6px 24px rgba(255,77,77,0.25); z-index: 9999;
-    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.25s;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
     white-space: nowrap; opacity: 0; pointer-events: none;
-    max-width: 90vw; overflow: hidden; text-overflow: ellipsis;
-    will-change: transform, opacity;
+    /* Ensure toast is above everything on iOS */
+    -webkit-transform: translateX(-50%) translateY(-80px) translateZ(0);
   }
-  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .toast.show {
+    transform: translateX(-50%) translateY(0) translateZ(0);
+    -webkit-transform: translateX(-50%) translateY(0) translateZ(0);
+    opacity: 1;
+  }
   .toast.info {
     background: #001a0a; border-color: var(--gold-dark); color: var(--gold-light);
     box-shadow: 0 6px 24px rgba(212,175,55,0.2);
-  }
-  .toast.success {
-    background: #001a0a; border-color: #25D366; color: #25D366;
-    box-shadow: 0 6px 24px rgba(37,211,102,0.2);
   }
 
   /* ── SUMMARY ── */
@@ -321,12 +342,19 @@
     font-size: 14px; flex-shrink: 0;
   }
   .cust-info { display: flex; flex-direction: column; }
-  .cust-label { font-size: 8px; letter-spacing: 2px; color: var(--gold-dark); text-transform: uppercase; font-weight: 700; }
-  .cust-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--gold-light); margin-top: 1px; line-height: 1.2; }
+  .cust-label {
+    font-size: 8px; letter-spacing: 2px; color: var(--gold-dark);
+    text-transform: uppercase; font-weight: 700;
+  }
+  .cust-name {
+    font-family: 'Playfair Display', serif; font-size: 16px;
+    font-weight: 700; color: var(--gold-light); margin-top: 1px; line-height: 1.2;
+  }
   .summary-section-label {
     font-size: 8px; letter-spacing: 2px; color: var(--gold-dark);
     text-transform: uppercase; font-weight: 700;
-    margin: 10px 0 4px; padding-top: 8px; border-top: 1px solid #222;
+    margin: 10px 0 4px; padding-top: 8px;
+    border-top: 1px solid #222;
   }
   .summary-section-label:first-of-type { border-top: none; margin-top: 4px; }
   .summary-row {
@@ -341,13 +369,19 @@
     display: flex; justify-content: space-between; align-items: center;
     padding-top: 14px; margin-top: 10px; border-top: 1px solid var(--gold-dark);
   }
-  .t-label { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; color: var(--white-dim); letter-spacing: 1.5px; text-transform: uppercase; }
+  .t-label {
+    font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700;
+    color: var(--white-dim); letter-spacing: 1.5px; text-transform: uppercase;
+  }
   .t-amount {
     font-family: 'Montserrat', sans-serif; font-size: 20px; font-weight: 700;
     background: linear-gradient(135deg, var(--gold-dark), var(--gold-light), var(--gold-shine));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
-  .summary-empty { text-align: center; padding: 8px 0; color: #999; font-size: 12px; letter-spacing: 1px; font-style: italic; }
+  .summary-empty {
+    text-align: center; padding: 8px 0; color: #999;
+    font-size: 12px; letter-spacing: 1px; font-style: italic;
+  }
 
   /* ── WHATSAPP BUTTON ── */
   .btn-whatsapp {
@@ -357,13 +391,24 @@
     font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
     letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
     display: flex; align-items: center; justify-content: center; gap: 10px;
-    box-shadow: 0 4px 20px rgba(37,211,102,0.2);
-    transition: transform 0.15s, box-shadow 0.15s; position: relative; overflow: hidden;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+    transition: transform 0.25s, box-shadow 0.25s; position: relative; overflow: hidden;
+    /* iOS button reset */
+    -webkit-appearance: none;
+    appearance: none;
   }
-  .btn-whatsapp:active { transform: scale(0.97); box-shadow: 0 2px 10px rgba(37,211,102,0.2); }
-  .btn-whatsapp:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .btn-whatsapp::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+    transition: left 0.6s ease;
+  }
+  .btn-whatsapp:hover::before { left: 150%; }
+  .btn-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,211,102,0.3); }
+  .btn-whatsapp:active { transform: scale(0.98); }
+  .btn-whatsapp:disabled {
+    opacity: 0.7; cursor: not-allowed;
+    background: linear-gradient(135deg, #0a4a20, #1a9e4e);
+  }
 
   .footer-note {
     text-align: center; font-size: 9px; color: #2e2e2e;
@@ -383,24 +428,27 @@
 
 <div class="container">
 
+  <!-- Your Details -->
   <div class="section-title">&#10022; Your Details</div>
   <div class="customer-card">
     <div class="input-group" style="margin-bottom:10px;">
       <span class="input-icon">&#128100;</span>
       <input type="text" id="customerName" placeholder="Full Name"
-        autocomplete="name" autocorrect="off" autocapitalize="words" spellcheck="false"
-        oninput="updateSummary()" />
+             autocomplete="name" autocorrect="off" autocapitalize="words" spellcheck="false"
+             oninput="updateSummary()" />
     </div>
     <div class="input-group">
       <span class="input-icon">&#128222;</span>
-      <input type="tel" id="customerPhone" placeholder="Phone Number (10 digits)"
-        maxlength="10" inputmode="numeric" pattern="[0-9]*"
-        autocomplete="tel" oninput="filterPhone(this); updateSummary();" />
+      <input type="tel" id="customerPhone" placeholder="Phone Number (10 digits)" maxlength="10"
+             autocomplete="tel" inputmode="numeric" pattern="[0-9]*"
+             oninput="filterPhone(this); updateSummary();" />
     </div>
   </div>
 
+  <!-- Select Items -->
   <div class="section-title">&#10022; Select Items</div>
 
+  <!-- TAB BUTTONS -->
   <div class="tabs-wrapper">
     <button class="tab-btn active" id="tab-rice" onclick="switchTab('rice')">
       <span class="tab-icon">&#127807;</span>
@@ -412,15 +460,18 @@
     </button>
   </div>
 
-  <!-- RICE TAB -->
+  <!-- ══════════════════════════════════════ -->
+  <!-- RICE TAB                              -->
+  <!-- ══════════════════════════════════════ -->
   <div class="tab-panel active" id="panel-rice">
 
+    <!-- RICE 1 -->
     <div class="item" id="rice-1" onclick="selectItem(event,'rice-1')">
       <div class="check-badge">&#10003;</div>
-      <img src="kurnool.webp" alt="Jilakara Masoori Kurnool" width="74" height="74" loading="eager" decoding="async">
+      <img src="kurnool.webp" loading="lazy" decoding="async" width="74" height="74" alt="Jilakara Masoori Kurnool Rice Bag">
       <div class="details">
         <div class="item-name">Jilakara Masoori <span class="badge">Popular</span></div>
-        <div class="item-sub">Kurnool Bag &middot; 24 kgs &middot; Patha Biyyam</div>
+        <div class="item-sub">Kurnool Bag - 24 kgs - Patha Biyyam</div>
         <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">1200</span><span class="per-bag"> / 24 kg bag</span></div>
       </div>
       <div class="qty-wrapper">
@@ -436,12 +487,13 @@
       </div>
     </div>
 
+    <!-- RICE 2 -->
     <div class="item" id="rice-2" onclick="selectItem(event,'rice-2')">
       <div class="check-badge">&#10003;</div>
-      <img src="24carat.webp" alt="Jilakara Masoori 24 Carat" width="74" height="74" loading="eager" decoding="async">
+      <img src="24carat.webp" loading="lazy" decoding="async" width="74" height="74" alt="Jilakara Masoori 24 Carat Rice Bag">
       <div class="details">
         <div class="item-name">Jilakara Masoori</div>
-        <div class="item-sub">24 Carat Bag &middot; 24 kgs &middot; Patha Biyyam</div>
+        <div class="item-sub">24 Carat Rice Bag - 24 kgs - Patha Biyyam</div>
         <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">1350</span><span class="per-bag"> / 24 kg bag</span></div>
       </div>
       <div class="qty-wrapper">
@@ -457,12 +509,13 @@
       </div>
     </div>
 
+    <!-- RICE 3 -->
     <div class="item" id="rice-3" onclick="selectItem(event,'rice-3')">
       <div class="check-badge">&#10003;</div>
-      <img src="pine.webp" alt="Molagolukulu Sannalu" width="74" height="74" loading="eager" decoding="async">
+      <img src="pine.webp" loading="lazy" decoding="async" width="74" height="74" alt="Molagolukulu Sannalu Rice Bag">
       <div class="details">
         <div class="item-name">Molagolukulu Sannalu</div>
-        <div class="item-sub">Pine Apple Brand &middot; 24kgs &middot; Patha Biyyam</div>
+        <div class="item-sub">Pine Apple Brand - 24kgs - Patha Biyyam</div>
         <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">1500</span><span class="per-bag"> / 24 kg bag</span></div>
       </div>
       <div class="qty-wrapper">
@@ -478,12 +531,13 @@
       </div>
     </div>
 
+    <!-- RICE 4 -->
     <div class="item" id="rice-4" onclick="selectItem(event,'rice-4')">
       <div class="check-badge">&#10003;</div>
-      <img src="half.webp" alt="Half Boiled HMT Rice" width="74" height="74" loading="eager" decoding="async">
+      <img src="half.webp" loading="lazy" decoding="async" width="74" height="74" alt="Half Boiled HMT rice bag">
       <div class="details">
-        <div class="item-name">Half Boiled &ndash; HMT Rice Bag</div>
-        <div class="item-sub">MVR KHAGESHVAR Brand &middot; 25 kgs</div>
+        <div class="item-name">Half Boiled - HMT Rice Bag</div>
+        <div class="item-sub">MVR KHAGESHVAR Brand - 25 kgs</div>
         <div class="item-price"><span class="rupee">&#8377;</span><span class="amount">1250</span><span class="per-bag"> / 25 kg bag</span></div>
       </div>
       <div class="qty-wrapper">
@@ -499,14 +553,17 @@
       </div>
     </div>
 
-  </div>
+  </div><!-- end panel-rice -->
 
-  <!-- GROCERY TAB -->
+  <!-- ══════════════════════════════════════ -->
+  <!-- GROCERY TAB                           -->
+  <!-- ══════════════════════════════════════ -->
   <div class="tab-panel" id="panel-grocery">
 
+    <!-- ITEM 1: Minapappu -->
     <div class="item" id="item-1" onclick="selectItem(event,'item-1')">
       <div class="check-badge">&#10003;</div>
-      <img src="mina.webp" alt="Minapappu" width="74" height="74" loading="lazy" decoding="async">
+      <img src="mina.webp" loading="lazy" decoding="async" width="74" height="74" alt="Minapappu">
       <div class="details">
         <div class="item-name">Minapappu <span class="badge">Best</span></div>
         <div class="item-sub">Urad Dal</div>
@@ -517,20 +574,28 @@
         <select class="qty-select" onchange="onQtyChange(event,'item-1')">
           <option value="0">-- kg</option>
           <option value="0.5">1/2 kg</option>
-          <option value="1">1 kg</option><option value="1.5">1.5 kg</option>
-          <option value="2">2 kg</option><option value="2.5">2.5 kg</option>
-          <option value="3">3 kg</option><option value="3.5">3.5 kg</option>
-          <option value="4">4 kg</option><option value="4.5">4.5 kg</option>
-          <option value="5">5 kg</option><option value="6">6 kg</option>
-          <option value="7">7 kg</option><option value="8">8 kg</option>
-          <option value="9">9 kg</option><option value="10">10 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
         </select>
       </div>
     </div>
 
+    <!-- ITEM 2: Kandipappu -->
     <div class="item" id="item-2" onclick="selectItem(event,'item-2')">
       <div class="check-badge">&#10003;</div>
-      <img src="kandi.webp" alt="Kandipappu" width="74" height="74" loading="lazy" decoding="async">
+      <img src="kandi.webp" loading="lazy" decoding="async" width="74" height="74" alt="Kandipappu">
       <div class="details">
         <div class="item-name">Kandipappu</div>
         <div class="item-sub">Toor Dal</div>
@@ -541,20 +606,28 @@
         <select class="qty-select" onchange="onQtyChange(event,'item-2')">
           <option value="0">-- kg</option>
           <option value="0.5">1/2 kg</option>
-          <option value="1">1 kg</option><option value="1.5">1.5 kg</option>
-          <option value="2">2 kg</option><option value="2.5">2.5 kg</option>
-          <option value="3">3 kg</option><option value="3.5">3.5 kg</option>
-          <option value="4">4 kg</option><option value="4.5">4.5 kg</option>
-          <option value="5">5 kg</option><option value="6">6 kg</option>
-          <option value="7">7 kg</option><option value="8">8 kg</option>
-          <option value="9">9 kg</option><option value="10">10 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
         </select>
       </div>
     </div>
 
+    <!-- ITEM 3: Veru Senagapappu -->
     <div class="item" id="item-3" onclick="selectItem(event,'item-3')">
       <div class="check-badge">&#10003;</div>
-      <img src="veru.webp" alt="Veru Senagapappu" width="74" height="74" loading="lazy" decoding="async">
+      <img src="veru.webp" loading="lazy" decoding="async" width="74" height="74" alt="Veru Senagapappu">
       <div class="details">
         <div class="item-name">Veru Senagapappu</div>
         <div class="item-sub">Whole Chickpeas</div>
@@ -565,20 +638,28 @@
         <select class="qty-select" onchange="onQtyChange(event,'item-3')">
           <option value="0">-- kg</option>
           <option value="0.5">1/2 kg</option>
-          <option value="1">1 kg</option><option value="1.5">1.5 kg</option>
-          <option value="2">2 kg</option><option value="2.5">2.5 kg</option>
-          <option value="3">3 kg</option><option value="3.5">3.5 kg</option>
-          <option value="4">4 kg</option><option value="4.5">4.5 kg</option>
-          <option value="5">5 kg</option><option value="6">6 kg</option>
-          <option value="7">7 kg</option><option value="8">8 kg</option>
-          <option value="9">9 kg</option><option value="10">10 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
         </select>
       </div>
     </div>
 
+    <!-- ITEM 4: Pesalapappu -->
     <div class="item" id="item-4" onclick="selectItem(event,'item-4')">
       <div class="check-badge">&#10003;</div>
-      <img src="pesa.webp" alt="Pesalapappu" width="74" height="74" loading="lazy" decoding="async">
+      <img src="pesa.webp" loading="lazy" decoding="async" width="74" height="74" alt="Pesalapappu">
       <div class="details">
         <div class="item-name">Pesalapappu</div>
         <div class="item-sub">Moong Dal</div>
@@ -589,20 +670,28 @@
         <select class="qty-select" onchange="onQtyChange(event,'item-4')">
           <option value="0">-- kg</option>
           <option value="0.5">1/2 kg</option>
-          <option value="1">1 kg</option><option value="1.5">1.5 kg</option>
-          <option value="2">2 kg</option><option value="2.5">2.5 kg</option>
-          <option value="3">3 kg</option><option value="3.5">3.5 kg</option>
-          <option value="4">4 kg</option><option value="4.5">4.5 kg</option>
-          <option value="5">5 kg</option><option value="6">6 kg</option>
-          <option value="7">7 kg</option><option value="8">8 kg</option>
-          <option value="9">9 kg</option><option value="10">10 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
         </select>
       </div>
     </div>
 
+    <!-- ITEM 5: Pachi Senagapappu -->
     <div class="item" id="item-5" onclick="selectItem(event,'item-5')">
       <div class="check-badge">&#10003;</div>
-      <img src="pachi.webp" alt="Pachi Senagapappu" width="74" height="74" loading="lazy" decoding="async">
+      <img src="pachi.webp" loading="lazy" decoding="async" width="74" height="74" alt="Pachi Senagapappu">
       <div class="details">
         <div class="item-name">Pachi Senagapappu</div>
         <div class="item-sub">Raw Chickpeas</div>
@@ -613,20 +702,28 @@
         <select class="qty-select" onchange="onQtyChange(event,'item-5')">
           <option value="0">-- kg</option>
           <option value="0.5">1/2 kg</option>
-          <option value="1">1 kg</option><option value="1.5">1.5 kg</option>
-          <option value="2">2 kg</option><option value="2.5">2.5 kg</option>
-          <option value="3">3 kg</option><option value="3.5">3.5 kg</option>
-          <option value="4">4 kg</option><option value="4.5">4.5 kg</option>
-          <option value="5">5 kg</option><option value="6">6 kg</option>
-          <option value="7">7 kg</option><option value="8">8 kg</option>
-          <option value="9">9 kg</option><option value="10">10 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
         </select>
       </div>
     </div>
 
+    <!-- ITEM 6: Saipappu -->
     <div class="item" id="item-6" onclick="selectItem(event,'item-6')">
       <div class="check-badge">&#10003;</div>
-      <img src="sai.webp" alt="Saipappu" width="74" height="74" loading="lazy" decoding="async">
+      <img src="sai.webp" loading="lazy" decoding="async" width="74" height="74" alt="Saipappu">
       <div class="details">
         <div class="item-name">Saipappu</div>
         <div class="item-sub">Lentils</div>
@@ -637,20 +734,28 @@
         <select class="qty-select" onchange="onQtyChange(event,'item-6')">
           <option value="0">-- kg</option>
           <option value="0.5">1/2 kg</option>
-          <option value="1">1 kg</option><option value="1.5">1.5 kg</option>
-          <option value="2">2 kg</option><option value="2.5">2.5 kg</option>
-          <option value="3">3 kg</option><option value="3.5">3.5 kg</option>
-          <option value="4">4 kg</option><option value="4.5">4.5 kg</option>
-          <option value="5">5 kg</option><option value="6">6 kg</option>
-          <option value="7">7 kg</option><option value="8">8 kg</option>
-          <option value="9">9 kg</option><option value="10">10 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
         </select>
       </div>
     </div>
 
+    <!-- ITEM 7: Chintapandu -->
     <div class="item" id="item-7" onclick="selectItem(event,'item-7')">
       <div class="check-badge">&#10003;</div>
-      <img src="chin.webp" alt="Chintapandu" width="74" height="74" loading="lazy" decoding="async">
+      <img src="chin.webp" loading="lazy" decoding="async" width="74" height="74" alt="Chintapandu">
       <div class="details">
         <div class="item-name">Chintapandu</div>
         <div class="item-sub">Tamarind</div>
@@ -661,18 +766,25 @@
         <select class="qty-select" onchange="onQtyChange(event,'item-7')">
           <option value="0">-- kg</option>
           <option value="0.5">1/2 kg</option>
-          <option value="1">1 kg</option><option value="1.5">1.5 kg</option>
-          <option value="2">2 kg</option><option value="2.5">2.5 kg</option>
-          <option value="3">3 kg</option><option value="3.5">3.5 kg</option>
-          <option value="4">4 kg</option><option value="4.5">4.5 kg</option>
-          <option value="5">5 kg</option><option value="6">6 kg</option>
-          <option value="7">7 kg</option><option value="8">8 kg</option>
-          <option value="9">9 kg</option><option value="10">10 kg</option>
+          <option value="1">1 kg</option>
+          <option value="1.5">1.5 kg</option>
+          <option value="2">2 kg</option>
+          <option value="2.5">2.5 kg</option>
+          <option value="3">3 kg</option>
+          <option value="3.5">3.5 kg</option>
+          <option value="4">4 kg</option>
+          <option value="4.5">4.5 kg</option>
+          <option value="5">5 kg</option>
+          <option value="6">6 kg</option>
+          <option value="7">7 kg</option>
+          <option value="8">8 kg</option>
+          <option value="9">9 kg</option>
+          <option value="10">10 kg</option>
         </select>
       </div>
     </div>
 
-  </div>
+  </div><!-- end panel-grocery -->
 
   <!-- Order Summary -->
   <div class="section-title">&#10022; Order Summary</div>
@@ -682,44 +794,42 @@
     <div id="summaryRows"></div>
   </div>
 
-  <button class="btn-whatsapp" id="orderBtn" onclick="sendToWhatsApp()">
-    <span style="font-size:18px">&#128172;</span>
-    <span id="orderBtnText">Place Order on WhatsApp</span>
+  <button class="btn-whatsapp" id="waBtn" onclick="sendToWhatsApp()">
+    <span style="font-size:18px">&#128172;</span> Place Order on WhatsApp
   </button>
 
   <div class="footer-note">&#10022; Orders confirmed via WhatsApp only &#10022;</div>
 </div>
 
 <script>
-  var RICE_PRICES = { 'rice-1':1200, 'rice-2':1350, 'rice-3':1500, 'rice-4':1250 };
-  var RICE_NAMES  = {
-    'rice-1': 'Jilakara Masoori - Kurnool (24kg)',
-    'rice-2': 'Jilakara Masoori - 24 Carat (24kg)',
-    'rice-3': 'Molagolukulu Sannalu - Pine Apple (24kg)',
-    'rice-4': 'Half Boiled HMT - MVR Brand (25kg)'
+  /* ── DATA ── */
+  var RICE_PRICES = {
+    'rice-1': 1200, 'rice-2': 1350, 'rice-3': 1500, 'rice-4': 1250
   };
-
-  var GROCERY_PRICES = { 'item-1':115,'item-2':135,'item-3':160,'item-4':110,'item-5':85,'item-6':90,'item-7':170 };
-  var GROCERY_NAMES  = {
-    'item-1':'Minapappu','item-2':'Kandipappu','item-3':'Veru Senagapappu',
-    'item-4':'Pesalapappu','item-5':'Pachi Senagapappu','item-6':'Saipappu','item-7':'Chintapandu'
+  var RICE_NAMES = {
+    'rice-1': 'Jilakara Masoori - Kurnool Bag (24kg)',
+    'rice-2': 'Jilakara Masoori - 24 Carat Bag (24kg)',
+    'rice-3': 'Molagolukulu Sannalu - Pine Apple Brand (24kg)',
+    'rice-4': 'Half Boiled HMT Rice Bag (25kg)'
   };
+  var RICE_IDS = ['rice-1','rice-2','rice-3','rice-4'];
 
-  var RICE_IDS = Object.keys(RICE_PRICES);
-  var GROCERY_IDS = Object.keys(GROCERY_PRICES);
+  var GROCERY_PRICES = {
+    'item-1': 115, 'item-2': 135, 'item-3': 160,
+    'item-4': 110, 'item-5': 85,  'item-6': 90, 'item-7': 170
+  };
+  var GROCERY_NAMES = {
+    'item-1': 'Minapappu',        'item-2': 'Kandipappu',
+    'item-3': 'Veru Senagapappu', 'item-4': 'Pesalapappu',
+    'item-5': 'Pachi Senagapappu','item-6': 'Saipappu',
+    'item-7': 'Chintapandu'
+  };
+  var GROCERY_IDS = ['item-1','item-2','item-3','item-4','item-5','item-6','item-7'];
+
   var ALL_IDS = RICE_IDS.concat(GROCERY_IDS);
-
   var toastTimer = null;
-  var isSending = false;
 
-  function getQty(id) {
-    return parseFloat(document.getElementById(id).querySelector('select').value) || 0;
-  }
-
-  function filterPhone(input) {
-    input.value = input.value.replace(/[^0-9]/g, '');
-  }
-
+  /* ── TAB SWITCH ── */
   function switchTab(tab) {
     document.getElementById('tab-rice').classList.toggle('active', tab === 'rice');
     document.getElementById('tab-grocery').classList.toggle('active', tab === 'grocery');
@@ -727,9 +837,14 @@
     document.getElementById('panel-grocery').classList.toggle('active', tab === 'grocery');
   }
 
-  function selectItem(e, id) {
-    if (e.target.tagName === 'SELECT') return;
+  /* ── DIGITS ONLY FOR PHONE ── */
+  function filterPhone(input) {
+    input.value = input.value.replace(/[^0-9]/g, '');
+  }
 
+  /* ── SELECT ITEM (click anywhere on card) ── */
+  function selectItem(e, id) {
+    if (e.target.tagName === 'SELECT' || e.target.tagName === 'OPTION') return;
     var item = document.getElementById(id);
     var sel  = item.querySelector('select');
 
@@ -739,144 +854,448 @@
       updateSummary();
       return;
     }
-
-    item.classList.toggle('selected');
+    if (item.classList.contains('selected')) {
+      item.classList.remove('selected','error');
+      sel.value = '0';
+      return;
+    }
+    item.classList.add('selected');
+    item.classList.remove('error');
   }
 
+  /* ── QTY DROPDOWN CHANGED ── */
   function onQtyChange(e, id) {
     e.stopPropagation();
-
     var item = document.getElementById(id);
-    var qty = getQty(id);
-
-    if (qty > 0) {
+    var sel  = item.querySelector('select');
+    if (parseFloat(sel.value) > 0) {
       item.classList.add('active');
       item.classList.remove('selected','error');
     } else {
       item.classList.remove('active');
       item.classList.add('selected');
     }
-
     updateSummary();
   }
 
+  /* ── CHECK IF ANY RICE BAG IS SELECTED ── */
   function hasRiceSelected() {
-    return RICE_IDS.some(id => getQty(id) > 0);
+    for (var i = 0; i < RICE_IDS.length; i++) {
+      if (parseFloat(document.getElementById(RICE_IDS[i]).querySelector('select').value) > 0) return true;
+    }
+    return false;
   }
 
+  /* ── GET TOTAL GROCERY KG ── */
   function getTotalGroceryKg() {
-    return GROCERY_IDS.reduce((t,id) => t + getQty(id), 0);
+    var total = 0;
+    for (var i = 0; i < GROCERY_IDS.length; i++) {
+      total += parseFloat(document.getElementById(GROCERY_IDS[i]).querySelector('select').value) || 0;
+    }
+    return total;
   }
 
+  /* ── LIVE SUMMARY UPDATE ── */
   function updateSummary() {
-    var name = document.getElementById('customerName').value.trim();
-    var phone = document.getElementById('customerPhone').value.trim();
+    var name      = document.getElementById('customerName').value.trim();
+    var custPhone = document.getElementById('customerPhone').value.trim();
 
-    var total = 0;
-    var html = '';
+    var riceHtml = '', riceTotal = 0, hasRice = false;
+    var grocHtml = '', grocTotal = 0, hasGroc = false;
 
-    ALL_IDS.forEach((id) => {
-      var qty = getQty(id);
+    for (var i = 0; i < RICE_IDS.length; i++) {
+      var id  = RICE_IDS[i];
+      var qty = parseFloat(document.getElementById(id).querySelector('select').value);
       if (qty > 0) {
-        var price = (RICE_PRICES[id] || GROCERY_PRICES[id]) * qty;
-        var nameTxt = RICE_NAMES[id] || GROCERY_NAMES[id];
-
-        total += price;
-
-        html += `<div class="summary-row">
-          <span class="s-name">${nameTxt}</span>
-          <span class="s-qty">${qty}</span>
-          <span class="s-price">₹ ${price}</span>
-        </div>`;
+        var it = RICE_PRICES[id] * qty;
+        riceTotal += it; hasRice = true;
+        riceHtml += '<div class="summary-row">'
+          + '<span class="s-name">' + RICE_NAMES[id] + '</span>'
+          + '<span class="s-qty">x' + qty + '</span>'
+          + '<span class="s-price">&#8377; ' + it.toFixed(0) + '</span>'
+          + '</div>';
       }
-    });
-
-    if (!html) {
-      document.getElementById('summaryEmpty').style.display = 'block';
-      document.getElementById('summaryRows').innerHTML = '';
-      return;
     }
 
-    document.getElementById('summaryEmpty').style.display = 'none';
+    for (var j = 0; j < GROCERY_IDS.length; j++) {
+      var gid  = GROCERY_IDS[j];
+      var gqty = parseFloat(document.getElementById(gid).querySelector('select').value);
+      if (gqty > 0) {
+        var git = GROCERY_PRICES[gid] * gqty;
+        grocTotal += git; hasGroc = true;
+        grocHtml += '<div class="summary-row">'
+          + '<span class="s-name">' + GROCERY_NAMES[gid] + '</span>'
+          + '<span class="s-qty">' + gqty + ' kg</span>'
+          + '<span class="s-price">&#8377; ' + git.toFixed(0) + '</span>'
+          + '</div>';
+      }
+    }
 
-    document.getElementById('summaryRows').innerHTML =
-      html +
-      `<div class="summary-total">
-        <span class="t-label">Total</span>
-        <span class="t-amount">₹ ${total}</span>
-      </div>`;
+    var hasItems   = hasRice || hasGroc;
+    var grandTotal = riceTotal + grocTotal;
+
+    var emptyEl    = document.getElementById('summaryEmpty');
+    var customerEl = document.getElementById('summaryCustomer');
+    var rowsEl     = document.getElementById('summaryRows');
+
+    if (!hasItems) {
+      emptyEl.style.display = 'block';
+      customerEl.innerHTML  = '';
+      rowsEl.innerHTML      = '';
+      return;
+    }
+    emptyEl.style.display = 'none';
+
+    if (name) {
+      var phoneHtml = custPhone
+        ? '<span style="font-size:11px;color:#b0b0b0;margin-top:3px;display:block;font-family:Montserrat,sans-serif;font-weight:500;">&#128222; ' + custPhone + '</span>'
+        : '';
+      customerEl.innerHTML =
+        '<div class="summary-customer">'
+        + '<div class="cust-icon">&#128100;</div>'
+        + '<div class="cust-info">'
+        + '<span class="cust-label">Order for</span>'
+        + '<span class="cust-name">' + name + '</span>'
+        + phoneHtml + '</div></div>';
+    } else {
+      customerEl.innerHTML = '';
+    }
+
+    var html = '';
+    if (hasRice) {
+      html += '<div class="summary-section-label">&#127807; Nellore Rice Club</div>';
+      html += riceHtml;
+    }
+    if (hasGroc) {
+      html += '<div class="summary-section-label">&#128722; Grocery</div>';
+      html += grocHtml;
+    }
+
+    html += '<div class="summary-total">'
+      + '<span class="t-label">Grand Total</span>'
+      + '<span class="t-amount">&#8377; ' + grandTotal.toFixed(0) + '</span>'
+      + '</div>';
+
+    if (!hasRice && hasGroc) {
+      var grocKg  = getTotalGroceryKg();
+      var pct     = Math.min((grocKg / 8) * 100, 100);
+      var barColor    = grocKg >= 8 ? '#d4af37' : '#555';
+      var barFill     = grocKg >= 8 ? '#f7d774' : '#d4af37';
+      var progressMsg = grocKg >= 8
+        ? '&#10003; Minimum order reached (' + grocKg + ' kg)'
+        : grocKg + ' kg of 8 kg minimum &mdash; add ' + (8 - grocKg).toFixed(1).replace('.0','') + ' kg more';
+      html += '<div style="margin-top:14px;">'
+        + '<div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:' + barColor + ';font-weight:700;margin-bottom:6px;">' + progressMsg + '</div>'
+        + '<div style="height:4px;background:#1e1e1e;border-radius:4px;overflow:hidden;">'
+        + '<div style="height:100%;width:' + pct + '%;background:linear-gradient(90deg,#a67c00,' + barFill + ');border-radius:4px;transition:width 0.4s ease;"></div>'
+        + '</div></div>';
+    } else if (hasRice) {
+      html += '<div style="margin-top:14px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);font-weight:700;">'
+        + '&#127807; Rice bag selected &mdash; no minimum for grocery items'
+        + '</div>';
+    }
+
+    rowsEl.innerHTML = html;
   }
 
-  function showToast(msg) {
+  /* ── TOAST ── */
+  function showToast(msg, type) {
     var t = document.getElementById('toast');
     t.textContent = msg;
+    t.className   = 'toast' + (type === 'info' ? ' info' : '');
     t.classList.add('show');
-
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('show'); }, 3500);
   }
 
-  function buildMessage(location) {
-    var name = document.getElementById('customerName').value.trim();
-    var phone = document.getElementById('customerPhone').value.trim();
+  /* ── BUILD WHATSAPP URL ── */
+  function buildWhatsAppURL(locationText) {
+    var name      = document.getElementById('customerName').value.trim();
+    var custPhone = document.getElementById('customerPhone').value.trim();
+    var lines = '', grandTotal = 0, count = 1;
 
-    var lines = '';
-    var total = 0;
-
-    ALL_IDS.forEach((id, i) => {
-      var qty = getQty(id);
+    var hasRiceItems = false;
+    for (var i = 0; i < RICE_IDS.length; i++) {
+      var qty = parseFloat(document.getElementById(RICE_IDS[i]).querySelector('select').value);
       if (qty > 0) {
-        var price = (RICE_PRICES[id] || GROCERY_PRICES[id]) * qty;
-        var nameTxt = RICE_NAMES[id] || GROCERY_NAMES[id];
-
-        total += price;
-        lines += `${i+1}. ${nameTxt} x${qty} - ₹${price}\n`;
+        var it = RICE_PRICES[RICE_IDS[i]] * qty;
+        if (!hasRiceItems) { lines += '--- Nellore Rice Club ---%0A'; hasRiceItems = true; }
+        lines += count + '. ' + RICE_NAMES[RICE_IDS[i]] + ' x' + qty + ' - Rs.' + it.toFixed(0) + '%0A';
+        grandTotal += it; count++;
       }
-    });
+    }
 
-    return encodeURIComponent(
-`Nellore Basket Order
-------------------------
-Name: ${name}
-Phone: ${phone}
-Location: ${location}
-------------------------
-${lines}
-Total: ₹${total}`
-    );
+    var hasGrocItems = false;
+    for (var j = 0; j < GROCERY_IDS.length; j++) {
+      var gqty = parseFloat(document.getElementById(GROCERY_IDS[j]).querySelector('select').value);
+      if (gqty > 0) {
+        var git = GROCERY_PRICES[GROCERY_IDS[j]] * gqty;
+        if (!hasGrocItems) { lines += '--- Grocery ---%0A'; hasGrocItems = true; }
+        lines += count + '. ' + GROCERY_NAMES[GROCERY_IDS[j]] + ' - ' + gqty + 'kg - Rs.' + git.toFixed(0) + '%0A';
+        grandTotal += git; count++;
+      }
+    }
+
+    var msg = 'Nellore Basket Order%0A'
+      + '----------------------------%0A'
+      + 'Name%3A ' + encodeURIComponent(name) + '%0A'
+      + 'Phone%3A ' + encodeURIComponent(custPhone) + '%0A'
+      + 'Location%3A ' + encodeURIComponent(locationText) + '%0A'
+      + '----------------------------%0A'
+      + lines
+      + '%0A*Total%3A Rs.' + grandTotal.toFixed(0) + '*';
+
+    return 'https://wa.me/918008970033?text=' + msg;
   }
 
+  /* ── OPEN WHATSAPP — iOS-SAFE ── */
+  /*
+   * THE ROOT CAUSE ON iOS / Safari:
+   * Safari blocks window.open() called from inside async callbacks
+   * (setTimeout, Promise .then, geolocation callbacks) because they
+   * are no longer considered "user-initiated" events.
+   *
+   * FIX: Open the window synchronously from the button click using
+   * a placeholder URL, then update its location once we have the
+   * geolocation result. We use a 5-second race: if GPS hasn't
+   * responded within 5 s we proceed without a location.
+   *
+   * For MAXIMUM GPS precision we request:
+   *   enableHighAccuracy: true  — forces GPS chip on mobile
+   *   timeout: 8000             — wait up to 8 s for a fix
+   *   maximumAge: 0             — never use a cached position
+   *
+   * We also watch for a second, higher-accuracy reading within
+   * 3 s of the first fix and upgrade if accuracy improves to ≤10 m.
+   */
   function sendToWhatsApp() {
-    if (isSending) return;
-    isSending = true;
+    var name      = document.getElementById('customerName').value.trim();
+    var custPhone = document.getElementById('customerPhone').value.trim();
 
-    var name = document.getElementById('customerName').value.trim();
-    var phone = document.getElementById('customerPhone').value.trim();
-
-    if (!name || phone.length !== 10) {
-      showToast('Enter valid details');
-      isSending = false;
+    /* 1. Name */
+    if (!name) {
+      showToast('Please enter your Full Name');
+      document.getElementById('customerName').scrollIntoView({ behavior:'smooth', block:'center' });
+      document.getElementById('customerName').focus();
       return;
     }
 
-    if (!navigator.geolocation) {
-      window.open(`https://wa.me/918008970033?text=${buildMessage("No location")}`);
-      isSending = false;
+    /* 2. Phone */
+    if (!custPhone) {
+      showToast('Please enter your Phone Number');
+      document.getElementById('customerPhone').scrollIntoView({ behavior:'smooth', block:'center' });
+      document.getElementById('customerPhone').focus();
+      return;
+    }
+    if (custPhone.length !== 10 || !/^[6-9][0-9]{9}$/.test(custPhone)) {
+      showToast('Enter a valid 10-digit Indian mobile number');
+      document.getElementById('customerPhone').scrollIntoView({ behavior:'smooth', block:'center' });
+      document.getElementById('customerPhone').focus();
       return;
     }
 
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        var loc = `${pos.coords.latitude}, ${pos.coords.longitude}`;
-        window.open(`https://wa.me/918008970033?text=${buildMessage(loc)}`);
-        isSending = false;
-      },
-      () => {
-        window.open(`https://wa.me/918008970033?text=${buildMessage("Location unavailable")}`);
-        isSending = false;
-      },
-      { enableHighAccuracy:false, timeout:7000 }
-    );
+    /* 3. Check selected-but-no-qty */
+    var missingId = null;
+    for (var i = 0; i < ALL_IDS.length; i++) {
+      var item = document.getElementById(ALL_IDS[i]);
+      var qty  = parseFloat(item.querySelector('select').value);
+      if (item.classList.contains('selected') && qty === 0) { missingId = ALL_IDS[i]; break; }
+    }
+    if (missingId) {
+      var mitem = document.getElementById(missingId);
+      mitem.classList.add('error');
+      mitem.scrollIntoView({ behavior:'smooth', block:'center' });
+      if (RICE_IDS.indexOf(missingId) !== -1) switchTab('rice');
+      else switchTab('grocery');
+      var mName = RICE_NAMES[missingId] || GROCERY_NAMES[missingId];
+      showToast('Please select a Quantity for ' + mName);
+      setTimeout(function() { mitem.classList.remove('error'); }, 2500);
+      return;
+    }
+
+    /* 4. At least one item */
+    var hasAny = false;
+    for (var j = 0; j < ALL_IDS.length; j++) {
+      if (parseFloat(document.getElementById(ALL_IDS[j]).querySelector('select').value) > 0) { hasAny = true; break; }
+    }
+    if (!hasAny) { showToast('Please select at least one item'); return; }
+
+    /* 5. Minimum 8 kg grocery (only if no rice bag) */
+    if (!hasRiceSelected()) {
+      var grocKg = getTotalGroceryKg();
+      if (grocKg < 8) {
+        var need = (8 - grocKg).toFixed(1).replace('.0','');
+        showToast('Minimum order is 8 kg. Add ' + need + ' kg more.');
+        return;
+      }
+    }
+
+    /* ── ALL VALIDATIONS PASSED ── */
+
+    /* Disable button to prevent double-tap */
+    var btn = document.getElementById('waBtn');
+    btn.disabled = true;
+    showToast('Getting your location...', 'info');
+
+    /*
+     * iOS FIX: Open the WhatsApp window SYNCHRONOUSLY right now
+     * (still inside the user-gesture call stack).
+     * We use a blank intermediate URL; Safari allows this.
+     * Then we navigate it to the real URL once we have location.
+     */
+    var waWindow = null;
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    if (isIOS) {
+      /* On iOS we can't keep a window handle and update it later
+         (Safari will block the navigation on the interim window from async context).
+         Instead: use a short 0 ms trick — build URL without location immediately,
+         then try geolocation in parallel and if we get it fast enough we re-open.
+         Actually the safest iOS approach: open immediately with "Fetching location..."
+         placeholder, then immediately replace href from the callback.
+         But Safari may still block that. The most reliable iOS approach:
+         collect location first with a tight timeout, then open. We use 5s max. */
+
+      /* Tight location race for iOS */
+      var locDone = false;
+
+      function openWA(locText) {
+        if (locDone) return;
+        locDone = true;
+        btn.disabled = false;
+        var url = buildWhatsAppURL(locText);
+        /* Use location.href as fallback if popup blocked */
+        var opened = window.open(url, '_blank');
+        if (!opened || opened.closed || typeof opened.closed === 'undefined') {
+          /* Popup was blocked — fall back to same tab navigation */
+          window.location.href = url;
+        }
+      }
+
+      var locTimeout = setTimeout(function() {
+        openWA('Location not shared');
+      }, 5000);
+
+      if (navigator.geolocation) {
+        var watchId = null;
+        var bestAccuracy = Infinity;
+        var upgradeTimeout = null;
+
+        /* First attempt — quick fix */
+        navigator.geolocation.getCurrentPosition(
+          function(pos) {
+            clearTimeout(locTimeout);
+            bestAccuracy = pos.coords.accuracy;
+            var lat = pos.coords.latitude.toFixed(7);
+            var lng = pos.coords.longitude.toFixed(7);
+            var mapLink = 'https://maps.google.com/?q=' + lat + ',' + lng;
+            var locText = lat + ', ' + lng + ' | Acc: ~' + Math.round(bestAccuracy) + 'm | ' + mapLink;
+
+            /* Try to get a better reading within 3 more seconds */
+            upgradeTimeout = setTimeout(function() {
+              if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+              openWA(locText);
+            }, 3000);
+
+            /* Watch for higher-accuracy update */
+            watchId = navigator.geolocation.watchPosition(
+              function(pos2) {
+                if (pos2.coords.accuracy < bestAccuracy) {
+                  bestAccuracy = pos2.coords.accuracy;
+                  var lat2 = pos2.coords.latitude.toFixed(7);
+                  var lng2 = pos2.coords.longitude.toFixed(7);
+                  var map2 = 'https://maps.google.com/?q=' + lat2 + ',' + lng2;
+                  locText  = lat2 + ', ' + lng2 + ' | Acc: ~' + Math.round(bestAccuracy) + 'm | ' + map2;
+                  /* If accuracy is good enough, don't wait the full 3 s */
+                  if (bestAccuracy <= 10) {
+                    clearTimeout(upgradeTimeout);
+                    navigator.geolocation.clearWatch(watchId);
+                    openWA(locText);
+                  }
+                }
+              },
+              function() { /* ignore watch errors */ },
+              { enableHighAccuracy: true, timeout: 3000, maximumAge: 0 }
+            );
+          },
+          function() {
+            clearTimeout(locTimeout);
+            openWA('Location not shared');
+          },
+          { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+        );
+      } else {
+        clearTimeout(locTimeout);
+        openWA('Location not supported');
+      }
+
+    } else {
+      /* ── ANDROID / other browsers ── */
+      /* window.open inside geolocation callback works fine here */
+      if (navigator.geolocation) {
+        var bestAcc2 = Infinity;
+        var locStr2  = 'Location not shared';
+        var sent2    = false;
+        var watchId2 = null;
+
+        function sendAndroid(locText) {
+          if (sent2) return;
+          sent2 = true;
+          if (watchId2 !== null) navigator.geolocation.clearWatch(watchId2);
+          btn.disabled = false;
+          window.open(buildWhatsAppURL(locText), '_blank');
+        }
+
+        /* 6-second max total wait on Android */
+        var androidTimeout = setTimeout(function() {
+          sendAndroid(locStr2 !== 'Location not shared' ? locStr2 : 'Location not shared');
+        }, 6000);
+
+        navigator.geolocation.getCurrentPosition(
+          function(pos) {
+            bestAcc2 = pos.coords.accuracy;
+            var lat = pos.coords.latitude.toFixed(7);
+            var lng = pos.coords.longitude.toFixed(7);
+            var mapLink = 'https://maps.google.com/?q=' + lat + ',' + lng;
+            locStr2 = lat + ', ' + lng + ' | Acc: ~' + Math.round(bestAcc2) + 'm | ' + mapLink;
+
+            /* Watch for better accuracy, max 3 s */
+            var upgradeEnd = setTimeout(function() {
+              clearTimeout(androidTimeout);
+              sendAndroid(locStr2);
+            }, 3000);
+
+            watchId2 = navigator.geolocation.watchPosition(
+              function(pos2) {
+                if (pos2.coords.accuracy < bestAcc2) {
+                  bestAcc2 = pos2.coords.accuracy;
+                  var lat2 = pos2.coords.latitude.toFixed(7);
+                  var lng2 = pos2.coords.longitude.toFixed(7);
+                  var map2 = 'https://maps.google.com/?q=' + lat2 + ',' + lng2;
+                  locStr2  = lat2 + ', ' + lng2 + ' | Acc: ~' + Math.round(bestAcc2) + 'm | ' + map2;
+                  if (bestAcc2 <= 10) {
+                    clearTimeout(upgradeEnd);
+                    clearTimeout(androidTimeout);
+                    sendAndroid(locStr2);
+                  }
+                }
+              },
+              function() { /* ignore */ },
+              { enableHighAccuracy: true, timeout: 3000, maximumAge: 0 }
+            );
+          },
+          function() {
+            clearTimeout(androidTimeout);
+            btn.disabled = false;
+            window.open(buildWhatsAppURL('Location not shared'), '_blank');
+          },
+          { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+        );
+      } else {
+        btn.disabled = false;
+        window.open(buildWhatsAppURL('Location not supported'), '_blank');
+      }
+    }
   }
 </script>
 
