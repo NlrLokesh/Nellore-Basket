@@ -825,7 +825,6 @@
     'item-7': 'Chintapandu'
   };
   var GROCERY_IDS = ['item-1','item-2','item-3','item-4','item-5','item-6','item-7'];
-
   var ALL_IDS = RICE_IDS.concat(GROCERY_IDS);
   var toastTimer = null;
 
@@ -842,12 +841,11 @@
     input.value = input.value.replace(/[^0-9]/g, '');
   }
 
-  /* ── SELECT ITEM (click anywhere on card) ── */
+  /* ── SELECT ITEM ── */
   function selectItem(e, id) {
     if (e.target.tagName === 'SELECT' || e.target.tagName === 'OPTION') return;
     var item = document.getElementById(id);
     var sel  = item.querySelector('select');
-
     if (item.classList.contains('active')) {
       item.classList.remove('active','selected','error');
       sel.value = '0';
@@ -878,7 +876,6 @@
     updateSummary();
   }
 
-  /* ── CHECK IF ANY RICE BAG IS SELECTED ── */
   function hasRiceSelected() {
     for (var i = 0; i < RICE_IDS.length; i++) {
       if (parseFloat(document.getElementById(RICE_IDS[i]).querySelector('select').value) > 0) return true;
@@ -886,7 +883,6 @@
     return false;
   }
 
-  /* ── GET TOTAL GROCERY KG ── */
   function getTotalGroceryKg() {
     var total = 0;
     for (var i = 0; i < GROCERY_IDS.length; i++) {
@@ -899,7 +895,6 @@
   function updateSummary() {
     var name      = document.getElementById('customerName').value.trim();
     var custPhone = document.getElementById('customerPhone').value.trim();
-
     var riceHtml = '', riceTotal = 0, hasRice = false;
     var grocHtml = '', grocTotal = 0, hasGroc = false;
 
@@ -909,31 +904,21 @@
       if (qty > 0) {
         var it = RICE_PRICES[id] * qty;
         riceTotal += it; hasRice = true;
-        riceHtml += '<div class="summary-row">'
-          + '<span class="s-name">' + RICE_NAMES[id] + '</span>'
-          + '<span class="s-qty">x' + qty + '</span>'
-          + '<span class="s-price">&#8377; ' + it.toFixed(0) + '</span>'
-          + '</div>';
+        riceHtml += '<div class="summary-row"><span class="s-name">' + RICE_NAMES[id] + '</span><span class="s-qty">x' + qty + '</span><span class="s-price">&#8377; ' + it.toFixed(0) + '</span></div>';
       }
     }
-
     for (var j = 0; j < GROCERY_IDS.length; j++) {
       var gid  = GROCERY_IDS[j];
       var gqty = parseFloat(document.getElementById(gid).querySelector('select').value);
       if (gqty > 0) {
         var git = GROCERY_PRICES[gid] * gqty;
         grocTotal += git; hasGroc = true;
-        grocHtml += '<div class="summary-row">'
-          + '<span class="s-name">' + GROCERY_NAMES[gid] + '</span>'
-          + '<span class="s-qty">' + gqty + ' kg</span>'
-          + '<span class="s-price">&#8377; ' + git.toFixed(0) + '</span>'
-          + '</div>';
+        grocHtml += '<div class="summary-row"><span class="s-name">' + GROCERY_NAMES[gid] + '</span><span class="s-qty">' + gqty + ' kg</span><span class="s-price">&#8377; ' + git.toFixed(0) + '</span></div>';
       }
     }
 
     var hasItems   = hasRice || hasGroc;
     var grandTotal = riceTotal + grocTotal;
-
     var emptyEl    = document.getElementById('summaryEmpty');
     var customerEl = document.getElementById('summaryCustomer');
     var rowsEl     = document.getElementById('summaryRows');
@@ -947,52 +932,26 @@
     emptyEl.style.display = 'none';
 
     if (name) {
-      var phoneHtml = custPhone
-        ? '<span style="font-size:11px;color:#b0b0b0;margin-top:3px;display:block;font-family:Montserrat,sans-serif;font-weight:500;">&#128222; ' + custPhone + '</span>'
-        : '';
-      customerEl.innerHTML =
-        '<div class="summary-customer">'
-        + '<div class="cust-icon">&#128100;</div>'
-        + '<div class="cust-info">'
-        + '<span class="cust-label">Order for</span>'
-        + '<span class="cust-name">' + name + '</span>'
-        + phoneHtml + '</div></div>';
+      var phoneHtml = custPhone ? '<span style="font-size:11px;color:#b0b0b0;margin-top:3px;display:block;font-family:Montserrat,sans-serif;font-weight:500;">&#128222; ' + custPhone + '</span>' : '';
+      customerEl.innerHTML = '<div class="summary-customer"><div class="cust-icon">&#128100;</div><div class="cust-info"><span class="cust-label">Order for</span><span class="cust-name">' + name + '</span>' + phoneHtml + '</div></div>';
     } else {
       customerEl.innerHTML = '';
     }
 
     var html = '';
-    if (hasRice) {
-      html += '<div class="summary-section-label">&#127807; Nellore Rice Club</div>';
-      html += riceHtml;
-    }
-    if (hasGroc) {
-      html += '<div class="summary-section-label">&#128722; Grocery</div>';
-      html += grocHtml;
-    }
-
-    html += '<div class="summary-total">'
-      + '<span class="t-label">Grand Total</span>'
-      + '<span class="t-amount">&#8377; ' + grandTotal.toFixed(0) + '</span>'
-      + '</div>';
+    if (hasRice) { html += '<div class="summary-section-label">&#127807; Nellore Rice Club</div>' + riceHtml; }
+    if (hasGroc) { html += '<div class="summary-section-label">&#128722; Grocery</div>' + grocHtml; }
+    html += '<div class="summary-total"><span class="t-label">Grand Total</span><span class="t-amount">&#8377; ' + grandTotal.toFixed(0) + '</span></div>';
 
     if (!hasRice && hasGroc) {
       var grocKg  = getTotalGroceryKg();
       var pct     = Math.min((grocKg / 8) * 100, 100);
-      var barColor    = grocKg >= 8 ? '#d4af37' : '#555';
-      var barFill     = grocKg >= 8 ? '#f7d774' : '#d4af37';
-      var progressMsg = grocKg >= 8
-        ? '&#10003; Minimum order reached (' + grocKg + ' kg)'
-        : grocKg + ' kg of 8 kg minimum &mdash; add ' + (8 - grocKg).toFixed(1).replace('.0','') + ' kg more';
-      html += '<div style="margin-top:14px;">'
-        + '<div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:' + barColor + ';font-weight:700;margin-bottom:6px;">' + progressMsg + '</div>'
-        + '<div style="height:4px;background:#1e1e1e;border-radius:4px;overflow:hidden;">'
-        + '<div style="height:100%;width:' + pct + '%;background:linear-gradient(90deg,#a67c00,' + barFill + ');border-radius:4px;transition:width 0.4s ease;"></div>'
-        + '</div></div>';
+      var barColor = grocKg >= 8 ? '#d4af37' : '#555';
+      var barFill  = grocKg >= 8 ? '#f7d774' : '#d4af37';
+      var progressMsg = grocKg >= 8 ? '&#10003; Minimum order reached (' + grocKg + ' kg)' : grocKg + ' kg of 8 kg minimum &mdash; add ' + (8 - grocKg).toFixed(1).replace('.0','') + ' kg more';
+      html += '<div style="margin-top:14px;"><div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:' + barColor + ';font-weight:700;margin-bottom:6px;">' + progressMsg + '</div><div style="height:4px;background:#1e1e1e;border-radius:4px;overflow:hidden;"><div style="height:100%;width:' + pct + '%;background:linear-gradient(90deg,#a67c00,' + barFill + ');border-radius:4px;transition:width 0.4s ease;"></div></div></div>';
     } else if (hasRice) {
-      html += '<div style="margin-top:14px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);font-weight:700;">'
-        + '&#127807; Rice bag selected &mdash; no minimum for grocery items'
-        + '</div>';
+      html += '<div style="margin-top:14px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dark);font-weight:700;">&#127807; Rice bag selected &mdash; no minimum for grocery items</div>';
     }
 
     rowsEl.innerHTML = html;
@@ -1024,7 +983,6 @@
         grandTotal += it; count++;
       }
     }
-
     var hasGrocItems = false;
     for (var j = 0; j < GROCERY_IDS.length; j++) {
       var gqty = parseFloat(document.getElementById(GROCERY_IDS[j]).querySelector('select').value);
@@ -1048,353 +1006,102 @@
     return 'https://wa.me/918008970033?text=' + msg;
   }
 
-  /* ── OPEN WHATSAPP — iOS-SAFE ── */
-  /*
-   * THE ROOT CAUSE ON iOS / Safari:
-   * Safari blocks window.open() called from inside async callbacks
-   * (setTimeout, Promise .then, geolocation callbacks) because they
-   * are no longer considered "user-initiated" events.
-   *
-   * FIX: Open the window synchronously from the button click using
-   * a placeholder URL, then update its location once we have the
-   * geolocation result. We use a 5-second race: if GPS hasn't
-   * responded within 5 s we proceed without a location.
-   *
-   * For MAXIMUM GPS precision we request:
-   *   enableHighAccuracy: true  — forces GPS chip on mobile
-   *   timeout: 8000             — wait up to 8 s for a fix
-   *   maximumAge: 0             — never use a cached position
-   *
-   * We also watch for a second, higher-accuracy reading within
-   * 3 s of the first fix and upgrade if accuracy improves to ≤10 m.
-   */
+  /* ── SEND TO WHATSAPP — IPHONE + ANDROID SAFE ── */
   function sendToWhatsApp() {
+    var name      = document.getElementById('customerName').value.trim();
+    var custPhone = document.getElementById('customerPhone').value.trim();
 
-  var name      = document.getElementById('customerName').value.trim();
-  var custPhone = document.getElementById('customerPhone').value.trim();
+    if (!name) { showToast('Please enter your Full Name'); document.getElementById('customerName').focus(); return; }
+    if (!custPhone) { showToast('Please enter your Phone Number'); document.getElementById('customerPhone').focus(); return; }
+    if (custPhone.length !== 10 || !/^[6-9][0-9]{9}$/.test(custPhone)) { showToast('Enter a valid 10-digit Indian mobile number'); document.getElementById('customerPhone').focus(); return; }
 
-  /* 1. NAME */
-  if (!name) {
-    showToast('Please enter your Full Name');
-    document.getElementById('customerName').focus();
-    return;
-  }
-
-  /* 2. PHONE */
-  if (!custPhone) {
-    showToast('Please enter your Phone Number');
-    document.getElementById('customerPhone').focus();
-    return;
-  }
-
-  if (custPhone.length !== 10 || !/^[6-9][0-9]{9}$/.test(custPhone)) {
-    showToast('Enter a valid 10-digit Indian mobile number');
-    document.getElementById('customerPhone').focus();
-    return;
-  }
-
-  /* 3. CHECK SELECTED BUT NO QTY */
-  var missingId = null;
-
-  for (var i = 0; i < ALL_IDS.length; i++) {
-    var item = document.getElementById(ALL_IDS[i]);
-    var qty  = parseFloat(item.querySelector('select').value);
-
-    if (item.classList.contains('selected') && qty === 0) {
-      missingId = ALL_IDS[i];
-      break;
+    var missingId = null;
+    for (var i = 0; i < ALL_IDS.length; i++) {
+      var item = document.getElementById(ALL_IDS[i]);
+      if (item.classList.contains('selected') && parseFloat(item.querySelector('select').value) === 0) { missingId = ALL_IDS[i]; break; }
     }
-  }
-
-  if (missingId) {
-    var mitem = document.getElementById(missingId);
-    mitem.classList.add('error');
-
-    mitem.scrollIntoView({ behavior:'smooth', block:'center' });
-
-    if (RICE_IDS.indexOf(missingId) !== -1) switchTab('rice');
-    else switchTab('grocery');
-
-    var mName = RICE_NAMES[missingId] || GROCERY_NAMES[missingId];
-
-    showToast('Please select a Quantity for ' + mName);
-
-    setTimeout(function() {
-      mitem.classList.remove('error');
-    }, 2500);
-
-    return;
-  }
-
-  /* 4. AT LEAST ONE ITEM */
-  var hasAny = false;
-
-  for (var j = 0; j < ALL_IDS.length; j++) {
-    if (parseFloat(document.getElementById(ALL_IDS[j]).querySelector('select').value) > 0) {
-      hasAny = true;
-      break;
-    }
-  }
-
-  if (!hasAny) {
-    showToast('Please select at least one item');
-    return;
-  }
-
-  /* 5. MINIMUM 8KG (NO RICE) */
-  if (!hasRiceSelected()) {
-    var grocKg = getTotalGroceryKg();
-
-    if (grocKg < 8) {
-      var need = (8 - grocKg).toFixed(1).replace('.0','');
-      showToast('Minimum order is 8 kg. Add ' + need + ' kg more.');
+    if (missingId) {
+      var mitem = document.getElementById(missingId);
+      mitem.classList.add('error');
+      mitem.scrollIntoView({ behavior:'smooth', block:'center' });
+      if (RICE_IDS.indexOf(missingId) !== -1) switchTab('rice'); else switchTab('grocery');
+      showToast('Please select a Quantity for ' + (RICE_NAMES[missingId] || GROCERY_NAMES[missingId]));
+      setTimeout(function() { mitem.classList.remove('error'); }, 2500);
       return;
     }
-  }
 
-  /* ── ALL VALIDATIONS PASSED ── */
+    var hasAny = false;
+    for (var j = 0; j < ALL_IDS.length; j++) {
+      if (parseFloat(document.getElementById(ALL_IDS[j]).querySelector('select').value) > 0) { hasAny = true; break; }
+    }
+    if (!hasAny) { showToast('Please select at least one item'); return; }
 
-  var btn = document.getElementById('waBtn');
-  btn.disabled = true;
-
-  /* ✅ OPEN TAB INSTANTLY (FIXES POPUP BLOCK) */
-  var waWindow = window.open('', '_blank');
-
-  if (!waWindow) {
-    showToast("Popup blocked. Please allow popups.");
-    btn.disabled = false;
-    return;
-  }
-
-  /* ✅ LOADING SCREEN */
-  waWindow.document.write(`
-    <div style="font-family:sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;background:#000;color:#fff;">
-      <div style="text-align:center">
-        <h2>📍 Getting precise location...</h2>
-        <p>Please wait (3–8 seconds)</p>
-      </div>
-    </div>
-  `);
-
-  /* ✅ HIGH ACCURACY GPS */
-  if (navigator.geolocation) {
-
-    navigator.geolocation.getCurrentPosition(
-
-      function(pos) {
-
-        var lat = pos.coords.latitude.toFixed(7);
-        var lng = pos.coords.longitude.toFixed(7);
-        var acc = Math.round(pos.coords.accuracy);
-
-        var map = "https://maps.google.com/?q=" + lat + "," + lng;
-
-        var locText = lat + ", " + lng + " (±" + acc + "m) " + map;
-
-        var url = buildWhatsAppURL(locText);
-
-        waWindow.location.href = url;
-
-        btn.disabled = false;
-      },
-
-      function(error) {
-
-        var msg = "Location not shared";
-
-        if (error.code === 1) msg = "Location permission denied";
-        else if (error.code === 2) msg = "Location unavailable";
-        else if (error.code === 3) msg = "Location timeout";
-
-        var url = buildWhatsAppURL(msg);
-
-        waWindow.location.href = url;
-
-        btn.disabled = false;
-      },
-
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
-      }
-    );
-
-  } else {
-    var url = buildWhatsAppURL("Location not supported");
-    waWindow.location.href = url;
-    btn.disabled = false;
-  }
-}
+    if (!hasRiceSelected()) {
+      var grocKg = getTotalGroceryKg();
+      if (grocKg < 8) { showToast('Minimum order is 8 kg. Add ' + (8 - grocKg).toFixed(1).replace('.0','') + ' kg more.'); return; }
+    }
 
     /* ── ALL VALIDATIONS PASSED ── */
-
-    /* Disable button to prevent double-tap */
     var btn = document.getElementById('waBtn');
     btn.disabled = true;
     showToast('Getting your location...', 'info');
 
-    /*
-     * iOS FIX: Open the WhatsApp window SYNCHRONOUSLY right now
-     * (still inside the user-gesture call stack).
-     * We use a blank intermediate URL; Safari allows this.
-     * Then we navigate it to the real URL once we have location.
-     */
-    var waWindow = null;
-    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    var locationDone = false;
 
-    if (isIOS) {
-      /* On iOS we can't keep a window handle and update it later
-         (Safari will block the navigation on the interim window from async context).
-         Instead: use a short 0 ms trick — build URL without location immediately,
-         then try geolocation in parallel and if we get it fast enough we re-open.
-         Actually the safest iOS approach: open immediately with "Fetching location..."
-         placeholder, then immediately replace href from the callback.
-         But Safari may still block that. The most reliable iOS approach:
-         collect location first with a tight timeout, then open. We use 5s max. */
-
-      /* Tight location race for iOS */
-      var locDone = false;
-
-      function openWA(locText) {
-        if (locDone) return;
-        locDone = true;
-        btn.disabled = false;
-        var url = buildWhatsAppURL(locText);
-        /* Use location.href as fallback if popup blocked */
-        var opened = window.open(url, '_blank');
-        if (!opened || opened.closed || typeof opened.closed === 'undefined') {
-          /* Popup was blocked — fall back to same tab navigation */
-          window.location.href = url;
-        }
-      }
-
-      var locTimeout = setTimeout(function() {
-        openWA('Location not shared');
-      }, 5000);
-
-      if (navigator.geolocation) {
-        var watchId = null;
-        var bestAccuracy = Infinity;
-        var upgradeTimeout = null;
-
-        /* First attempt — quick fix */
-        navigator.geolocation.getCurrentPosition(
-          function(pos) {
-            clearTimeout(locTimeout);
-            bestAccuracy = pos.coords.accuracy;
-            var lat = pos.coords.latitude.toFixed(7);
-            var lng = pos.coords.longitude.toFixed(7);
-            var mapLink = 'https://maps.google.com/?q=' + lat + ',' + lng;
-            var locText = lat + ', ' + lng + ' | Acc: ~' + Math.round(bestAccuracy) + 'm | ' + mapLink;
-
-            /* Try to get a better reading within 3 more seconds */
-            upgradeTimeout = setTimeout(function() {
-              if (watchId !== null) navigator.geolocation.clearWatch(watchId);
-              openWA(locText);
-            }, 3000);
-
-            /* Watch for higher-accuracy update */
-            watchId = navigator.geolocation.watchPosition(
-              function(pos2) {
-                if (pos2.coords.accuracy < bestAccuracy) {
-                  bestAccuracy = pos2.coords.accuracy;
-                  var lat2 = pos2.coords.latitude.toFixed(7);
-                  var lng2 = pos2.coords.longitude.toFixed(7);
-                  var map2 = 'https://maps.google.com/?q=' + lat2 + ',' + lng2;
-                  locText  = lat2 + ', ' + lng2 + ' | Acc: ~' + Math.round(bestAccuracy) + 'm | ' + map2;
-                  /* If accuracy is good enough, don't wait the full 3 s */
-                  if (bestAccuracy <= 10) {
-                    clearTimeout(upgradeTimeout);
-                    navigator.geolocation.clearWatch(watchId);
-                    openWA(locText);
-                  }
-                }
-              },
-              function() { /* ignore watch errors */ },
-              { enableHighAccuracy: true, timeout: 3000, maximumAge: 0 }
-            );
-          },
-          function() {
-            clearTimeout(locTimeout);
-            openWA('Location not shared');
-          },
-          { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
-        );
-      } else {
-        clearTimeout(locTimeout);
-        openWA('Location not supported');
-      }
-
-    } else {
-      /* ── ANDROID / other browsers ── */
-      /* window.open inside geolocation callback works fine here */
-      if (navigator.geolocation) {
-        var bestAcc2 = Infinity;
-        var locStr2  = 'Location not shared';
-        var sent2    = false;
-        var watchId2 = null;
-
-        function sendAndroid(locText) {
-          if (sent2) return;
-          sent2 = true;
-          if (watchId2 !== null) navigator.geolocation.clearWatch(watchId2);
-          btn.disabled = false;
-          window.open(buildWhatsAppURL(locText), '_blank');
-        }
-
-        /* 6-second max total wait on Android */
-        var androidTimeout = setTimeout(function() {
-          sendAndroid(locStr2 !== 'Location not shared' ? locStr2 : 'Location not shared');
-        }, 6000);
-
-        navigator.geolocation.getCurrentPosition(
-          function(pos) {
-            bestAcc2 = pos.coords.accuracy;
-            var lat = pos.coords.latitude.toFixed(7);
-            var lng = pos.coords.longitude.toFixed(7);
-            var mapLink = 'https://maps.google.com/?q=' + lat + ',' + lng;
-            locStr2 = lat + ', ' + lng + ' | Acc: ~' + Math.round(bestAcc2) + 'm | ' + mapLink;
-
-            /* Watch for better accuracy, max 3 s */
-            var upgradeEnd = setTimeout(function() {
-              clearTimeout(androidTimeout);
-              sendAndroid(locStr2);
-            }, 3000);
-
-            watchId2 = navigator.geolocation.watchPosition(
-              function(pos2) {
-                if (pos2.coords.accuracy < bestAcc2) {
-                  bestAcc2 = pos2.coords.accuracy;
-                  var lat2 = pos2.coords.latitude.toFixed(7);
-                  var lng2 = pos2.coords.longitude.toFixed(7);
-                  var map2 = 'https://maps.google.com/?q=' + lat2 + ',' + lng2;
-                  locStr2  = lat2 + ', ' + lng2 + ' | Acc: ~' + Math.round(bestAcc2) + 'm | ' + map2;
-                  if (bestAcc2 <= 10) {
-                    clearTimeout(upgradeEnd);
-                    clearTimeout(androidTimeout);
-                    sendAndroid(locStr2);
-                  }
-                }
-              },
-              function() { /* ignore */ },
-              { enableHighAccuracy: true, timeout: 3000, maximumAge: 0 }
-            );
-          },
-          function() {
-            clearTimeout(androidTimeout);
-            btn.disabled = false;
-            window.open(buildWhatsAppURL('Location not shared'), '_blank');
-          },
-          { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
-        );
-      } else {
-        btn.disabled = false;
-        window.open(buildWhatsAppURL('Location not supported'), '_blank');
-      }
+    function openWhatsApp(locText) {
+      if (locationDone) return;
+      locationDone = true;
+      btn.disabled = false;
+      /* 
+       * iPhone Safari FIX: Never use window.open() from async callbacks.
+       * Instead, use window.location.href which always works on all browsers.
+       * The user will see WhatsApp open in a new page context.
+       */
+      window.location.href = buildWhatsAppURL(locText);
     }
+
+    /* Safety net: if GPS takes more than 10 seconds, send without location */
+    var fallbackTimer = setTimeout(function() {
+      openWhatsApp('Location timed out');
+    }, 10000);
+
+    if (!navigator.geolocation) {
+      clearTimeout(fallbackTimer);
+      openWhatsApp('Location not supported');
+      return;
+    }
+
+    /* Attempt 1: High-accuracy GPS (works on iPhone outdoors) */
+    navigator.geolocation.getCurrentPosition(
+      function(pos) {
+        clearTimeout(fallbackTimer);
+        var lat     = pos.coords.latitude.toFixed(7);
+        var lng     = pos.coords.longitude.toFixed(7);
+        var acc     = Math.round(pos.coords.accuracy);
+        var mapLink = 'https://maps.google.com/?q=' + lat + ',' + lng;
+        openWhatsApp(lat + ', ' + lng + ' (±' + acc + 'm) ' + mapLink);
+      },
+      function(err) {
+        clearTimeout(fallbackTimer);
+        /* Attempt 2: If high-accuracy fails, try network/wifi location */
+        navigator.geolocation.getCurrentPosition(
+          function(pos2) {
+            var lat2     = pos2.coords.latitude.toFixed(7);
+            var lng2     = pos2.coords.longitude.toFixed(7);
+            var acc2     = Math.round(pos2.coords.accuracy);
+            var mapLink2 = 'https://maps.google.com/?q=' + lat2 + ',' + lng2;
+            openWhatsApp(lat2 + ', ' + lng2 + ' (±' + acc2 + 'm) ' + mapLink2);
+          },
+          function() {
+            var reason = err.code === 1 ? 'Location permission denied' : 'Location not available';
+            openWhatsApp(reason);
+          },
+          { enableHighAccuracy: false, timeout: 5000, maximumAge: 30000 }
+        );
+      },
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+    );
   }
 </script>
-
 </body>
 </html>
