@@ -168,7 +168,7 @@
     border-radius: 14px; padding: 14px; margin-bottom: 10px;
     transition: border-color 0.3s ease, background-color 0.3s ease;
     position: relative; overflow: hidden;
-    cursor: pointer;
+    cursor: default;
     user-select: none;
     -webkit-user-select: none;
     -webkit-transform: translateZ(0);
@@ -179,11 +179,6 @@
     background: linear-gradient(135deg, rgba(212,175,55,0.05), transparent 60%);
     opacity: 0; transition: opacity 0.3s; pointer-events: none;
   }
-  .item.selected {
-    border-color: var(--gold-dark);
-    box-shadow: 0 0 0 1px rgba(166,124,0,0.5), 0 4px 18px rgba(212,175,55,0.08);
-  }
-  .item.selected::before { opacity: 0.5; }
   .item.active {
     border-color: var(--gold);
     box-shadow: 0 0 0 1px var(--gold-dark), 0 8px 30px rgba(212,175,55,0.18);
@@ -256,25 +251,21 @@
     display: flex; flex-direction: column; align-items: center; gap: 5px; margin-right: 30px;
   }
   .qty-label {
-    font-size: 8px; letter-spacing: 1.5px; color: #3a3a3a;
+    font-size: 8px; letter-spacing: 1.5px; color: var(--gold-dark);
     text-transform: uppercase; font-weight: 600; transition: color 0.3s;
   }
-  .item.selected .qty-label, .item.active .qty-label { color: var(--gold-dark); }
+  .item.active .qty-label { color: var(--gold); }
 
   select.qty-select {
     padding: 9px 28px 9px 12px; border-radius: 8px;
-    border: 1px solid #252525; background: var(--black-mid); color: #444;
+    border: 1px solid var(--gold-dark); background: var(--black-mid); color: #888;
     font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 600;
     cursor: pointer; outline: none; transition: all 0.3s; min-width: 80px;
     -webkit-appearance: none;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23444' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 10px center;
-    pointer-events: none;
-  }
-  .item.selected select.qty-select, .item.active select.qty-select {
-    pointer-events: auto; border-color: var(--gold-dark); color: #888;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23a67c00' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center;
+    pointer-events: auto;
   }
   .item.active select.qty-select {
     border-color: var(--gold); color: var(--gold-light); background-color: #1a1500;
@@ -581,7 +572,7 @@
   <!-- RICE TAB -->
   <div class="tab-panel active" id="panel-rice">
 
-    <div class="item" id="rice-1" onclick="selectItem(event,'rice-1')">
+    <div class="item" id="rice-1">
       <div class="check-badge">&#10003;</div>
       <img src="kurnool.webp" loading="lazy" decoding="async" width="74" height="74" alt="Jilakara Masoori Kurnool Rice Bag">
       <div class="details">
@@ -602,7 +593,7 @@
       </div>
     </div>
 
-    <div class="item" id="rice-2" onclick="selectItem(event,'rice-2')">
+    <div class="item" id="rice-2">
       <div class="check-badge">&#10003;</div>
       <img src="24carat.webp" loading="lazy" decoding="async" width="74" height="74" alt="Jilakara Masoori 24 Carat Rice Bag">
       <div class="details">
@@ -623,7 +614,7 @@
       </div>
     </div>
 
-    <div class="item" id="rice-3" onclick="selectItem(event,'rice-3')">
+    <div class="item" id="rice-3">
       <div class="check-badge">&#10003;</div>
       <img src="pine.webp" loading="lazy" decoding="async" width="74" height="74" alt="Molagolukulu Sannalu Rice Bag">
       <div class="details">
@@ -644,7 +635,7 @@
       </div>
     </div>
 
-    <div class="item" id="rice-4" onclick="selectItem(event,'rice-4')">
+    <div class="item" id="rice-4">
       <div class="check-badge">&#10003;</div>
       <img src="half.webp" loading="lazy" decoding="async" width="74" height="74" alt="Half Boiled HMT rice bag">
       <div class="details">
@@ -670,7 +661,7 @@
   <!-- GROCERY TAB -->
   <div class="tab-panel" id="panel-grocery">
 
-    <div class="item" id="item-1" onclick="selectItem(event,'item-1')">
+    <div class="item" id="item-1">
       <div class="check-badge">&#10003;</div>
       <img src="mina.webp" loading="lazy" decoding="async" width="74" height="74" alt="Minapappu">
       <div class="details">
@@ -701,7 +692,7 @@
       </div>
     </div>
 
-    <div class="item" id="item-2" onclick="selectItem(event,'item-2')">
+    <div class="item" id="item-2">
       <div class="check-badge">&#10003;</div>
       <img src="kandi.webp" loading="lazy" decoding="async" width="74" height="74" alt="Kandipappu">
       <div class="details">
@@ -732,7 +723,7 @@
       </div>
     </div>
 
-    <div class="item" id="item-3" onclick="selectItem(event,'item-3')">
+    <div class="item" id="item-3">
       <div class="check-badge">&#10003;</div>
       <img src="veru.webp" loading="lazy" decoding="async" width="74" height="74" alt="Veru Senagapappu">
       <div class="details">
@@ -763,7 +754,7 @@
       </div>
     </div>
 
-    <div class="item" id="item-4" onclick="selectItem(event,'item-4')">
+    <div class="item" id="item-4">
       <div class="check-badge">&#10003;</div>
       <img src="pesa.webp" loading="lazy" decoding="async" width="74" height="74" alt="Pesalapappu">
       <div class="details">
@@ -794,7 +785,7 @@
       </div>
     </div>
 
-    <div class="item" id="item-5" onclick="selectItem(event,'item-5')">
+    <div class="item" id="item-5">
       <div class="check-badge">&#10003;</div>
       <img src="pachi.webp" loading="lazy" decoding="async" width="74" height="74" alt="Pachi Senagapappu">
       <div class="details">
@@ -825,7 +816,7 @@
       </div>
     </div>
 
-    <div class="item" id="item-6" onclick="selectItem(event,'item-6')">
+    <div class="item" id="item-6">
       <div class="check-badge">&#10003;</div>
       <img src="sai.webp" loading="lazy" decoding="async" width="74" height="74" alt="Saipappu">
       <div class="details">
@@ -856,7 +847,7 @@
       </div>
     </div>
 
-    <div class="item" id="item-7" onclick="selectItem(event,'item-7')">
+    <div class="item" id="item-7">
       <div class="check-badge">&#10003;</div>
       <img src="chin.webp" loading="lazy" decoding="async" width="74" height="74" alt="Chintapandu">
       <div class="details">
@@ -944,26 +935,6 @@
     input.value = input.value.replace(/[^0-9]/g, '');
   }
 
-  /* ── SELECT ITEM ── */
-  function selectItem(e, id) {
-    if (e.target.tagName === 'SELECT' || e.target.tagName === 'OPTION') return;
-    var item = document.getElementById(id);
-    var sel  = item.querySelector('select');
-    if (item.classList.contains('active')) {
-      item.classList.remove('active','selected','error');
-      sel.value = '0';
-      updateSummary();
-      return;
-    }
-    if (item.classList.contains('selected')) {
-      item.classList.remove('selected','error');
-      sel.value = '0';
-      return;
-    }
-    item.classList.add('selected');
-    item.classList.remove('error');
-  }
-
   /* ── QTY DROPDOWN CHANGED ── */
   function onQtyChange(e, id) {
     e.stopPropagation();
@@ -971,10 +942,9 @@
     var sel  = item.querySelector('select');
     if (parseFloat(sel.value) > 0) {
       item.classList.add('active');
-      item.classList.remove('selected','error');
+      item.classList.remove('error');
     } else {
-      item.classList.remove('active');
-      item.classList.add('selected');
+      item.classList.remove('active','error');
     }
     updateSummary();
   }
@@ -1121,21 +1091,6 @@
     if (!name) { showToast('Please enter your Full Name'); document.getElementById('customerName').focus(); return; }
     if (!custPhone) { showToast('Please enter your Phone Number'); document.getElementById('customerPhone').focus(); return; }
     if (custPhone.length !== 10 || !/^[6-9][0-9]{9}$/.test(custPhone)) { showToast('Enter a valid 10-digit Indian mobile number'); document.getElementById('customerPhone').focus(); return; }
-
-    var missingId = null;
-    for (var i = 0; i < ALL_IDS.length; i++) {
-      var item = document.getElementById(ALL_IDS[i]);
-      if (item.classList.contains('selected') && parseFloat(item.querySelector('select').value) === 0) { missingId = ALL_IDS[i]; break; }
-    }
-    if (missingId) {
-      var mitem = document.getElementById(missingId);
-      mitem.classList.add('error');
-      mitem.scrollIntoView({ behavior:'smooth', block:'center' });
-      if (RICE_IDS.indexOf(missingId) !== -1) switchTab('rice'); else switchTab('grocery');
-      showToast('Please select a Quantity for ' + (RICE_NAMES[missingId] || GROCERY_NAMES[missingId]));
-      setTimeout(function() { mitem.classList.remove('error'); }, 2500);
-      return;
-    }
 
     var hasAny = false;
     for (var j = 0; j < ALL_IDS.length; j++) {
